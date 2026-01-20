@@ -1,6 +1,6 @@
 # FB Financial Calculator P.2
 
-# Checks if it's valid, stolen from a past project\
+# Checks if it's valid, stolen from a past project
 
 def roundfunc(question):
     while True:
