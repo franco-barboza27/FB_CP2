@@ -10,7 +10,7 @@ import sys
         # if it is in the range of the allowed inputs break the loop
 def inputchecker(rangeofchoices):
     while True:
-            choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices})")
+            choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices}):\n")
             try:
                 choicevar = int(choicevar)
                 if choicevar in range(1, rangeofchoices+1):
@@ -182,6 +182,6 @@ def menu(database):
                 print("Very well, going back to the menu.")
 
 print("Hello, this is a book database!\nThe main point of it is to store books and their authors inside of one library.")
-books = [["Title1", "title2"], ["author1", "author2"]]
+books = [[], []]
 
 menu(books)
