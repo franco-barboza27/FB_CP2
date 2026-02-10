@@ -26,7 +26,7 @@ def inputchecker(rangeofchoices):
             # itemnum:[title], [genre(s)], [director(s)], [actor(s)], length, rating]
 
 def databasemaker():
-    with open("individual_projects\movie.py\datatest.csv", mode="r") as file:
+    with open("individual_projects/movie.py/datatest.csv", mode="r") as file:
 
         movies = {}
         reader = csv.reader(file)
@@ -50,8 +50,20 @@ def databasemaker():
 
                 count += 1
                 movies[count] = (thismovie)
+    
+def filterreadier(moviebase):
+    searchermoviebase = {}
+    searchermoviebase.copy(movies)
 
-    menu(movies)
+    movieskeys = searchermoviebase.keys()
+    moviedetailkeys = searchermoviebase[1].keys()
+
+    for key in movieskeys:
+        for detail in moviedetailkeys:
+            searchermoviebase[key][detail].strip(" ,/-':;|}]{[=+_>.<!@#$%^&*()").casefold()
+
+    print(movies)
+    menu(movies, searchermoviebase)
 
 # display menu and go to the option they chose (view list, search, exit)
 
@@ -99,19 +111,19 @@ def searcher(database):
         
         count += 1
 
-    if filters[0] = 1:
+    if filters[0] == 1:
         name = input("What is the name of this movie?")
-    if filters[0] = 2:
+    if filters[0] == 2:
         name = input("What is the genre?")
-    if filters[0] = 3:
+    if filters[0] == 3:
         name = input("What is the name the director")
-    if filters[0] = 4:
+    if filters[0] == 4:
         name = input("What is an actor in the movie?")
-    if filters[0] = 1:
+    if filters[0] == 1:
         name = input("What is w?")
 
     def filtering():
-        
+        pass
         
          
 
@@ -124,13 +136,13 @@ def searcher(database):
 
 
 
-def menu():
+def menu(movies):
     print("1. make a password\n2. leave the program?")
     placevar = inputchecker(2)
 
     match placevar:
         case 1:
-            requirements()
+            pass
         case 2:
             sys.exit()
 
