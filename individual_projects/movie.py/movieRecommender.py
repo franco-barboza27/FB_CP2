@@ -34,11 +34,9 @@ def databasemaker():
         count = 0
 
         for line in file:
-            thismovie = {}
             for line in reader:
                 
-                thismovie.update(
-                {
+                thismovie ={
                     header[0]: line[0],
                     header[1]: line[1],
                     header[2]: line[2],
@@ -46,14 +44,15 @@ def databasemaker():
                     header[4]: line[4],
                     header[5]: line[5]
                 }
-                )
+        
 
                 count += 1
-                movies[count] = (thismovie)
+                movies[count] = thismovie
+    
+    filterreadier(movies)
     
 def filterreadier(moviebase):
-    searchermoviebase = {}
-    searchermoviebase.copy(movies)
+    searchermoviebase = moviebase.copy()
 
     movieskeys = searchermoviebase.keys()
     moviedetailkeys = searchermoviebase[1].keys()
@@ -62,8 +61,8 @@ def filterreadier(moviebase):
         for detail in moviedetailkeys:
             searchermoviebase[key][detail].strip(" ,/-':;|}]{[=+_>.<!@#$%^&*()").casefold()
 
-    print(movies)
-    menu(movies, searchermoviebase)
+    print(f"{moviebase}\n\n\n\n{searchermoviebase}")
+    menu(moviebase, searchermoviebase)
 
 # display menu and go to the option they chose (view list, search, exit)
 
