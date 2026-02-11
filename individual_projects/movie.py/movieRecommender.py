@@ -50,21 +50,34 @@ def databasemaker():
                 movies[count] = thismovie
     
     filterreadier(movies)
-    
+
+# makes a copy of the database, and then strip and lowercaseify every single value
+
 def filterreadier(moviebase):
+
+    chars_to_remove = " ,/-':;|}]{[=+_>.<!@#$%^&*()"
+    table = str.maketrans("", "", chars_to_remove)
+
     searchermoviebase = moviebase.copy()
+
+    for diction in moviebase:
+        searchermoviebase[diction] = moviebase[diction].copy()
 
     movieskeys = searchermoviebase.keys()
     moviedetailkeys = searchermoviebase[1].keys()
 
     for key in movieskeys:
+
         for detail in moviedetailkeys:
-            searchermoviebase[key][detail].strip(" ,/-':;|}]{[=+_>.<!@#$%^&*()").casefold()
+
+            text = searchermoviebase[key][detail]
+            lowertext = text.casefold()
+            strippedtext = lowertext.translate(table)
+
+            searchermoviebase[key][detail] = strippedtext
 
     print(f"{moviebase}\n\n\n\n{searchermoviebase}")
     menu(moviebase, searchermoviebase)
-
-# display menu and go to the option they chose (view list, search, exit)
 
 # search FUNCTION
     # display menu of search by: name, genre, director, actor, length
@@ -95,31 +108,31 @@ def filterreadier(moviebase):
 
     # call the viewer function
 
-def searcher(database):
-    print("Search by\n1. Name\n2. Genre\n3. Director\n4. Actor\n 5. Length")
+def searcher(database, stripped):
     
     count = 1
     filters = []
 
     while count < 5:
         print(f"would you like to filter for option {count}?{"enter an option smaller than the option to say NO"}")
-        filtersingular = inputchecker(0, count)
+        filtersingular = inputchecker(count)
 
         if filtersingular == count:
             filters.append(filtersingular)
         
         count += 1
 
-    if filters[0] == 1:
-        name = input("What is the name of this movie?")
-    if filters[0] == 2:
-        name = input("What is the genre?")
-    if filters[0] == 3:
-        name = input("What is the name the director")
-    if filters[0] == 4:
-        name = input("What is an actor in the movie?")
-    if filters[0] == 1:
-        name = input("What is w?")
+    requirementslist = []
+
+    def answers(question):
+        requi = input(f"{question}(Input 0 to skip):\n")
+
+        requirementslist.append(requi)
+
+    questions = ["What is the name of this movie?", "What is the genre?", "What is the name the director", "What is an actor in the movie?"]
+
+    for ques in questions:
+        answers(ques)
 
     def filtering():
         pass
@@ -132,17 +145,21 @@ def searcher(database):
             # print the movie name, and all the other information
     # otherwise:
         # say that there aren't any movies under the specified 
+def viewer(movies, strippedata):
+    pass
 
+# display menu and go to the option they chose (view list, search, exit)
 
-
-def menu(movies):
-    print("1. make a password\n2. leave the program?")
-    placevar = inputchecker(2)
+def menu(movies, strippedmovies):
+    print("1. View movies\n2. Search\n3. leave the program?")
+    placevar = inputchecker(3)
 
     match placevar:
         case 1:
-            pass
+            viewer(movies, strippedmovies)
         case 2:
+            searcher(movies, strippedmovies)
+        case 3:
             sys.exit()
 
 databasemaker()
