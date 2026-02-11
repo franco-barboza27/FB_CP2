@@ -1,27 +1,5 @@
+mydict = {1:2, 2:3, 4:5, 3:4}
 
-def funcname(paraparaprpa):
-    paraparaprpa = paraparaprpa + 1
-    return paraparaprpa
+keys = mydict.keys()
 
-
-levelnum = 10
-
-testuple = ("Level", levelnum)
-
-level, value = testuple
-
-print(f"{level} {value}")
-
-value += 5
-
-print(f"{level} {value}")
-
-
-
-print(funcname(5))
-
-print("String")
-
-lis = ["list", True, False, {"thing":1, 5:8.98, "point":"party"}]
-
-print(lis[3].keys())
+print(type(keys))

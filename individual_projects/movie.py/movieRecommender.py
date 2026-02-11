@@ -26,7 +26,7 @@ def inputchecker(rangeofchoices):
             # itemnum:[title], [genre(s)], [director(s)], [actor(s)], length, rating]
 
 def databasemaker():
-    with open("individual_projects/movie.py/datatest.csv", mode="r") as file:
+    with open("individual_projects/movie.py/movies.csv", mode="r") as file:
 
         movies = {}
         reader = csv.reader(file)
@@ -63,8 +63,8 @@ def filterreadier(moviebase):
     for diction in moviebase:
         searchermoviebase[diction] = moviebase[diction].copy()
 
-    movieskeys = searchermoviebase.keys()
-    moviedetailkeys = searchermoviebase[1].keys()
+    movieskeys = list(searchermoviebase.keys())
+    moviedetailkeys = list(searchermoviebase[1].keys())
 
     for key in movieskeys:
 
@@ -76,7 +76,6 @@ def filterreadier(moviebase):
 
             searchermoviebase[key][detail] = strippedtext
 
-    print(f"{moviebase}\n\n\n\n{searchermoviebase}")
     menu(moviebase, searchermoviebase)
 
 # search FUNCTION
@@ -109,35 +108,65 @@ def filterreadier(moviebase):
     # call the viewer function
 
 def searcher(database, stripped):
-    
-    count = 1
+
     filters = []
 
-    while count < 5:
-        print(f"would you like to filter for option {count}?{"enter an option smaller than the option to say NO"}")
-        filtersingular = inputchecker(count)
-
-        if filtersingular == count:
-            filters.append(filtersingular)
-        
-        count += 1
-
-    requirementslist = []
-
     def answers(question):
-        requi = input(f"{question}(Input 0 to skip):\n")
+        while True:
+            requi = input(f"{question}(Input 0 to skip):\n")
+            if requi:
+                break
 
-        requirementslist.append(requi)
+        filters.append(requi)
 
     questions = ["What is the name of this movie?", "What is the genre?", "What is the name the director", "What is an actor in the movie?"]
 
     for ques in questions:
         answers(ques)
 
-    def filtering():
-        pass
+    strippedfilters = []
+
+    for filter in filters:
+        if filter != "0":
+            chars_to_remove = " ,/-':;|}]{[=+_>.<!@#$%^&*()"
+            table = str.maketrans("", "", chars_to_remove)
+            filter = filter.casefold()
+            filter = filter.translate(table)
+
+        strippedfilters.append(filter)
+    
+    filters = strippedfilters
+
+    def filtering(filters, database, stripped):
+
+        viewingbase = {}
+
+        keysofstripped = list(stripped[1].keys())
+
+        tracker = 1
+
+        for movie in stripped:
+            matching = True
+            count = 0
+
+            for filter in filters:
+
+                keyval = keysofstripped[count]
+
+                if filter != "0":
+                    if filter not in stripped[movie][keyval]:
+                        matching = False
+
+                count += 1
+
+            if matching == True:
+                viewingbase.update({tracker:database[tracker]})
+
+            tracker += 1
         
-         
+        viewer(database, stripped, viewingbase)
+
+    filtering(filters, database, stripped)
 
 # view the movies FUNCTION
     # if the movies are existent
@@ -145,21 +174,38 @@ def searcher(database, stripped):
             # print the movie name, and all the other information
     # otherwise:
         # say that there aren't any movies under the specified 
-def viewer(movies, strippedata):
-    pass
+def viewer(movies, strippedata, dataviewed):
+
+    keys = list(dataviewed.keys())
+    count = 0
+
+    for movie in dataviewed:
+        count += 1
+        print(f"{count}. ")
+        for value in dataviewed[movie]:
+            try:
+                print(f" -  {value} : {dataviewed[movie][value]}")
+            except:
+                print("aw dangit!")
+    
+    try:
+        print(dataviewed[1])
+    except:
+        print("Hmmmm, it seems that there aren't any movies under those requirements... how unfortunate")
 
 # display menu and go to the option they chose (view list, search, exit)
 
 def menu(movies, strippedmovies):
-    print("1. View movies\n2. Search\n3. leave the program?")
-    placevar = inputchecker(3)
+    while True:
+        print("1. View movies\n2. Search\n3. leave the program?")
+        placevar = inputchecker(3)
 
-    match placevar:
-        case 1:
-            viewer(movies, strippedmovies)
-        case 2:
-            searcher(movies, strippedmovies)
-        case 3:
-            sys.exit()
+        match placevar:
+            case 1:
+                viewer(movies, strippedmovies, movies)
+            case 2:
+                searcher(movies, strippedmovies)
+            case 3:
+                sys.exit()
 
 databasemaker()
