@@ -3,10 +3,31 @@
 import csv
 import sys
 
+# for every item in the first list of the database
+    # check if the item exists in the CSV file
+        # if it doesnt, add it to the CSV
+        # if it does, do nothing
+
+    # create a new database
+        # for item in the new database,
+            # check if it's inside the OLD database
+                # if it's not
+                    # delete it from the database (rewrite it)
+
+
+def filesaver(bookbase):
+    pass
+
+# Open up the book file
+# make a list of books
+# for every line in said file,
+    # for ever line in the READER
+        # add the book and author details to the books database
+
 def databasemaker():
     with open("individual_projects/libraryUpdate/books.csv", mode="r") as file:
 
-        books = []
+        books = [[],[]]
         reader = csv.reader(file)
         count = 0
 
@@ -17,7 +38,8 @@ def databasemaker():
                 thisauthor = line[1]
 
                 count += 1
-                books.append(list(thisbook))
+                books[0].append(thisbook)
+                books[1].append(thisauthor)
     
     return books
 
@@ -196,10 +218,11 @@ def menu(database):
             print("Going to the Item Removal menu")
             remover(database)
         else:
-            print("Are you certain you want to terminate the program? Doing so will permanantly clear your database.")
+            print("Are you certain you want to terminate the program? Doing so will also save all changes.")
             print("1. Yes\n2. No")
             terminatequestion = inputchecker(2)
             if terminatequestion == 1:
+                filesaver(database)
                 sys.exit()
             else:
                 print("Very well, going back to the menu.")
