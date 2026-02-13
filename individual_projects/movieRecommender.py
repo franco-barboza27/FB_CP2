@@ -26,7 +26,7 @@ def inputchecker(rangeofchoices):
             # itemnum:[title], [genre(s)], [director(s)], [actor(s)], length, rating]
 
 def databasemaker():
-    with open("individual_projects/movieFolder/movies.csv", mode="r") as file:
+    with open("individual_projects\movies.csv", mode="r") as file:
 
         movies = {}
         reader = csv.reader(file)
