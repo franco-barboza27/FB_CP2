@@ -1,4 +1,24 @@
-# FB 2nd Personal Library Program
+# FB 2nd update Personal Library Program
+
+
+
+# upate functions
+# was working on making the searcher more decompositioned
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import csv
 import sys
@@ -16,7 +36,16 @@ import sys
 
 
 def filesaver(bookbase):
-    pass
+
+    headers = ["title", "author"]
+
+    with open("individual_projects/libraryUpdate/books.csv", mode="w") as file:
+        writer = csv.writer(file)
+        writehead = file.write(headers)
+
+        for book in bookbase:
+            details = book.values()
+            writerows = file.writelines(details)
 
 # Open up the book file
 # make a list of books
@@ -25,21 +54,31 @@ def filesaver(bookbase):
         # add the book and author details to the books database
 
 def databasemaker():
-    with open("individual_projects/libraryUpdate/books.csv", mode="r") as file:
 
-        books = [[],[]]
-        reader = csv.reader(file)
-        count = 0
+    try:
+        with open("individual_projects/libraryUpdate/books.csv", mode="r") as file:
 
-        for line in file:
-            for line in reader:
+            books = [{}]
+            reader = csv.reader(file)
+            count = 0
+
+            for line in file:
+                for line in reader:
                 
-                thisbook = line[0]
-                thisauthor = line[1]
+                    thisbook = line[0]
+                    thisauthor = line[1]
+                    thisyear = line[2]
+                    thisgenre = line[3]
 
+                    count += 1
+                    books[count]["title"] = thisbook
+                    books[count]["author"] = thisauthor
+                    books[count]["year"] = thisyear
+                    books[count]["genre"] = thisgenre
+                
                 count += 1
-                books[0].append(thisbook)
-                books[1].append(thisauthor)
+    except:
+        books = [{"title":"title example", "author":"example author", "year":1843, "genre":"genre example"}]
     
     return books
 
@@ -75,9 +114,13 @@ def additems(database):
     while True:
         name = input("What is the title of this book?:\n")
         creator = input("Who is the author of this book?:\n")
+        year = input("When was this book published?")
+        genre = input("What genre is this book?")
 
-        database[0].append(name)
-        database[1].append(creator)
+        database[-1]["author"] = creator
+        database[-1]["title"] = name
+        database[-1]["year"] = year
+        database[-1]["genre"] = genre
 
         while True:
             print("Would you like to:\n1. Add another work\n2. Go to the menu")
@@ -100,7 +143,11 @@ def additems(database):
 
     # call the menu
 def searcher(database):
-    print("Would you like to:\n1. Search by book name\n2. Search by author\n3. Go back to menu")
+
+    def questioner():
+        pass
+
+    print("Would you like to: \n1. Search by book name \n2. Search by author \n3. Search by year \n4. Search by genre \n5. Go back to menu")
     checker = inputchecker(3)
 
     if checker == 1:
@@ -164,7 +211,7 @@ def remover(database):
     # for every pair in the booklist
         # display the count. book title and by author
         # add 1 to count
-def viewworks(database):
+def skimview(database):
     listednumber = 0
     databasesize = len(database[0])
     counter = 0
@@ -188,6 +235,11 @@ def viewworks(database):
             print("Very well.")
         print("\n\n\n")
 
+# detailed view FUNCTION
+    #
+def detailedview(database):
+    pass
+
 # Menu function
     # Present the list of options (1-3)
     # Ask them which one they want to do
@@ -197,7 +249,7 @@ def menu(database):
     while True:
         print("Which would you like to use? (enter the number of the item)")
 
-        optlist = ["1. View booklist", "2. Search/sort", "3. Add a book", "4. Remove a book", "5. Exit"]
+        optlist = ["1. Basic view", "2. Detailed view", "3. Search/sort", "4. Add a book", "5. Remove a book", "6. Exit"]
 
         for item in optlist:
             print(item)
@@ -206,15 +258,18 @@ def menu(database):
         print("\n\n\n")
 
         if choice == 1:
-            print("Opening book list")
-            viewworks(database)
+            print("Opening basic view")
+            skimview(database)
         elif choice == 2:
+            print("Opening detailed view")
+            detailedview(database)
+        elif choice == 3:
             print("Opening sort menu")
             searcher(database)
-        elif choice == 3:
+        elif choice == 4:
             print("Going to the Item Addition menu")
             additems(database)
-        elif choice == 4:
+        elif choice == 5:
             print("Going to the Item Removal menu")
             remover(database)
         else:
