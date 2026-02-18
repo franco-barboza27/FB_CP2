@@ -1,24 +1,7 @@
 # FB 2nd update Personal Library Program
 
-
-
 # upate functions
 # was working on making the searcher more decompositioned
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import csv
 import sys
@@ -37,15 +20,20 @@ import sys
 
 def filesaver(bookbase):
 
-    headers = ["title", "author"]
-
-    with open("individual_projects/libraryUpdate/books.csv", mode="w") as file:
-        writer = csv.writer(file)
-        writehead = file.write(headers)
+    with open("individual_projects/libraryUpdate/books.csv", mode="w") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames = ["title","author","year","genre"])
+        heading = ["title","author","year","genre"]
+        writer.writeheader()
+        # writer.writerow(file, )
 
         for book in bookbase:
             details = book.values()
-            writerows = file.writelines(details)
+            writerows = csv_file.writelines(details)
+        
+        for book in bookbase:
+            keylings = list(book.keys())
+            value = list(book.values())
+            writer.writerow({keylings[0]:value[0], keylings[1]:value[0], keylings[2]: value[2], keylings[3]: value[3]})
 
 # Open up the book file
 # make a list of books
@@ -58,29 +46,44 @@ def databasemaker():
     try:
         with open("individual_projects/libraryUpdate/books.csv", mode="r") as file:
 
-            books = [{}]
+            books = []
             reader = csv.reader(file)
-            count = 0
 
             for line in file:
                 for line in reader:
-                
+                    books.append({})
+
+
                     thisbook = line[0]
                     thisauthor = line[1]
                     thisyear = line[2]
                     thisgenre = line[3]
 
-                    count += 1
-                    books[count]["title"] = thisbook
-                    books[count]["author"] = thisauthor
-                    books[count]["year"] = thisyear
-                    books[count]["genre"] = thisgenre
-                
-                count += 1
+                    books[-1]["title"] = thisbook
+                    books[-1]["author"] = thisauthor
+                    books[-1]["year"] = thisyear
+                    books[-1]["genre"] = thisgenre
+
     except:
         books = [{"title":"title example", "author":"example author", "year":1843, "genre":"genre example"}]
     
     return books
+
+# Helper function that checks if they want to go to the menu yet or not
+def menuquestion(database):
+    while True:
+        print("Would you like to:")
+        print("1. Go to menu\n2. Not yet")
+        answer = inputchecker(2)
+
+        if answer == 1:
+            print("Going to the menu")
+            menu(database)
+            print("\n\n\n")
+        elif answer == 2:
+            print("Very well.")
+            break
+        print("\n\n\n")
 
 # input checking function
     # Loop until otherwise:
@@ -117,22 +120,14 @@ def additems(database):
         year = input("When was this book published?")
         genre = input("What genre is this book?")
 
+        database.append({})
+
         database[-1]["author"] = creator
         database[-1]["title"] = name
         database[-1]["year"] = year
         database[-1]["genre"] = genre
 
-        while True:
-            print("Would you like to:\n1. Add another work\n2. Go to the menu")
-            answer = inputchecker(2)
-
-            if answer == 1:
-                print("Very well")
-                break
-            else:
-                print("Going to the menu")
-                print("\n\n\n")
-                menu(database)
+        menuquestion(database)
 
 # search for an item function
     # ask if they'd like to search by title or by author
@@ -144,33 +139,39 @@ def additems(database):
     # call the menu
 def searcher(database):
 
-    def questioner():
-        pass
-
-    print("Would you like to: \n1. Search by book name \n2. Search by author \n3. Search by year \n4. Search by genre \n5. Go back to menu")
-    checker = inputchecker(3)
-
-    if checker == 1:
-        booktitle = input("What is the name of the book? (Case sensitive):\n")
+    def questioner(catigorytype):
+        if catigorytype == "year":
+            answer = input(f"What is the publishing {catigorytype} of the book? (Case sensitive):\n")
+        else:
+            answer = input(f"What is the {catigorytype} of the book? (Case sensitive):\n")
+        
         counter = 0
         tracker = 0
-        for item in database[0]:
-            if item == booktitle:
+        for item in database:
+            if item[catigorytype] == answer:
                 counter += 1
-                print(f"{counter}. {item} by {database[1][tracker]}")
+                print(f"{counter}. {item["title"]} by {item["author"]} published in {item["year"]}, the genre is {item["genre"]}")
+            else:
+                print("Hmm, Sorry, but we couldn't find the book you were looking for, are you sure it was spelt correctly?")
             tracker += 1
-            
-    elif checker == 2:
-        authorname = input("What is the name of the author? (Case sensitive):\n")
-        counter = 0
-        tracker = 0
-        for item in database[1]:
-            if item == authorname:
-                counter += 1
-                print(f"{counter}. {database[0][tracker]} by {item}")
-            tracker += 1
-    
-    print("\n\n\n")
+
+    while True:
+        print("Would you like to: \n1. Search by book name \n2. Search by author \n3. Search by year \n4. Search by genre")
+        checker = inputchecker(4)
+
+        if checker == 1:
+            questioner("title")
+                
+        elif checker == 2:
+            questioner("author")
+        
+        elif checker == 3:
+            questioner("year")
+        
+        elif checker == 4:
+            questioner("genre")
+        
+        menuquestion(database)
 
 # remove an item function
     # display What is the title of this book?  # In the future this can change to the word "work"
@@ -183,27 +184,26 @@ def searcher(database):
 
     # call the menu
 def remover(database):
-    title = input("What is the name of the book?")
-    author = input("What is the name of the author?")
+    while True:
+        title = input("What is the name of the book?")
+        author = input("What is the name of the author?")
 
-    print("Are you sure you want to remove all instances of this specific work from your database?\n1. Yes\n2. No")
-    answer = inputchecker(2)
-    if answer == 1:
-        print("Now deleting and going to menu")
-    else:
-        print("Ok, going back to menu")
-        menu(database)
+        print("Are you sure you want to remove all instances of this specific work from your database?\n1. Yes\n2. No")
+        answer = inputchecker(2)
+        if answer == 1:
+            print("Now deleting and going to menu")
+        else:
+            print("Ok, going back to menu")
+            menu(database)
 
-    counter = 0
-    for item in database[0]:
-        if title == item:
-            if database[1][counter] == author:
-                database[0].pop(counter)
-                database[1].pop(counter)
-        counter += 1
-    
-    menu(database)
-    print("\n\n\n")
+        counter = 0
+        for item in database:
+            if item["title"] == title:
+                if item["author"] == author:
+                    database.pop(counter)
+            counter += 1
+        
+        menuquestion(database)
 
 # view works function
     # count = 1
@@ -212,33 +212,41 @@ def remover(database):
         # display the count. book title and by author
         # add 1 to count
 def skimview(database):
-    listednumber = 0
-    databasesize = len(database[0])
-    counter = 0
-
-    while counter in range(0, databasesize):
-        listednumber += 1
-        print(f"{listednumber}. {database[0][counter]} by {database[1][counter]}")
-        counter += 1
-    print("\n\n")
-
     while True:
-        print("Would you like to:")
-        print("1. Go to menu\n2. Not yet")
-        answer = inputchecker(2)
+        listednumber = 0
+        databasesize = len(database[0])
+        counter = 0
 
-        if answer == 1:
-            print("Going to the menu")
-            menu(database)
-            print("\n\n\n")
-        elif answer == 2:
-            print("Very well.")
+        while counter in range(0, databasesize):
+            listednumber += 1
+            try:
+                print(f"{listednumber}. {database[counter]["title"]} by {database[counter]["author"]}")
+                counter += 1
+            except:
+                counter += 1
+                print("This is the end of the list")
         print("\n\n\n")
 
+        menuquestion(database)
+
 # detailed view FUNCTION
-    #
+    # Do similar thing done in the other function BUT add genre and publishing year
 def detailedview(database):
-    pass
+    while True:
+        listednumber = 0
+        databasesize = len(database[0])
+        counter = 0
+
+        while counter in range(0, databasesize):
+            listednumber += 1
+            try:
+                print(f"{listednumber}. {database[counter]["title"]} by {database[counter]["author"]} published in {database[counter]["year"]}, the genre is {database[counter]["genre"]}")
+            except:
+                print("This is the end of the list")
+            counter += 1
+        print("\n\n\n")
+
+        menuquestion(database)
 
 # Menu function
     # Present the list of options (1-3)
@@ -254,7 +262,7 @@ def menu(database):
         for item in optlist:
             print(item)
 
-        choice = inputchecker(5)
+        choice = inputchecker(6)
         print("\n\n\n")
 
         if choice == 1:
