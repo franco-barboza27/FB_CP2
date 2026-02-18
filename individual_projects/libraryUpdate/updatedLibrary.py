@@ -21,19 +21,15 @@ import sys
 def filesaver(bookbase):
 
     with open("individual_projects/libraryUpdate/books.csv", mode="w") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames = ["title","author","year","genre"])
+        writer = csv.DictWriter(csv_file, fieldnames = ["title","author","year","genre"], delimiter=",")
         heading = ["title","author","year","genre"]
         writer.writeheader()
         # writer.writerow(file, )
-
-        for book in bookbase:
-            details = book.values()
-            writerows = csv_file.writelines(details)
         
         for book in bookbase:
             keylings = list(book.keys())
             value = list(book.values())
-            writer.writerow({keylings[0]:value[0], keylings[1]:value[0], keylings[2]: value[2], keylings[3]: value[3]})
+            writer.writerow({keylings[0]:value[0], keylings[1]:value[1], keylings[2]: value[2], keylings[3]: value[3]})
 
 # Open up the book file
 # make a list of books
@@ -51,18 +47,20 @@ def databasemaker():
 
             for line in file:
                 for line in reader:
-                    books.append({})
+
+                    if line:
+                        books.append({})
 
 
-                    thisbook = line[0]
-                    thisauthor = line[1]
-                    thisyear = line[2]
-                    thisgenre = line[3]
+                        thisbook = line[0]
+                        thisauthor = line[1]
+                        thisyear = line[2]
+                        thisgenre = line[3]
 
-                    books[-1]["title"] = thisbook
-                    books[-1]["author"] = thisauthor
-                    books[-1]["year"] = thisyear
-                    books[-1]["genre"] = thisgenre
+                        books[-1]["title"] = thisbook
+                        books[-1]["author"] = thisauthor
+                        books[-1]["year"] = thisyear
+                        books[-1]["genre"] = thisgenre
 
     except:
         books = [{"title":"title example", "author":"example author", "year":1843, "genre":"genre example"}]
