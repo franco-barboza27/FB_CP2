@@ -6,6 +6,27 @@
 import csv
 import sys
 
+# input checking function
+    # Loop until otherwise:
+        # ask which item wanted
+        # try to turn it into a number
+            # if that doesn't work retry the loop
+        # if it is in the range of the allowed inputs break the loop
+def inputchecker(rangeofchoices):
+    while True:
+            choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices}):\n")
+            try:
+                choicevar = int(choicevar)
+                if choicevar in range(1, rangeofchoices+1):
+                    break
+                else:
+                    print("That's not an option :(")
+                    continue
+            except:
+                    continue
+            
+    return choicevar
+
 # for every item in the first list of the database
     # check if the item exists in the CSV file
         # if it doesnt, add it to the CSV
@@ -82,27 +103,6 @@ def menuquestion(database):
             print("Very well.")
             break
         print("\n\n\n")
-
-# input checking function
-    # Loop until otherwise:
-        # ask which item wanted
-        # try to turn it into a number
-            # if that doesn't work retry the loop
-        # if it is in the range of the allowed inputs break the loop
-def inputchecker(rangeofchoices):
-    while True:
-            choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices}):\n")
-            try:
-                choicevar = int(choicevar)
-                if choicevar in range(1, rangeofchoices+1):
-                    break
-                else:
-                    print("That's not an option :(")
-                    continue
-            except:
-                    continue
-            
-    return choicevar
 
 # add item function
     # display What is the title of this book?  # In the future this can change to the word "work"
