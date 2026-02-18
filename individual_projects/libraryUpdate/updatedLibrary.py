@@ -212,7 +212,7 @@ def remover(database):
 def skimview(database):
     while True:
         listednumber = 0
-        databasesize = len(database[0])
+        databasesize = len(database)
         counter = 0
 
         while counter in range(0, databasesize):
