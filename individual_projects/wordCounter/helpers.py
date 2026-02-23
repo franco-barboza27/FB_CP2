@@ -13,3 +13,15 @@ def inputchecker(rangeofchoices):
                     continue
             
     return choicevar
+
+# TXT database maker
+    # open in mode write
+        # add each line to a list
+
+def textlister(filepath):
+
+    text = []
+
+    with open(filepath, mode="r") as file:
+        for line in file:
+            text.append(line)

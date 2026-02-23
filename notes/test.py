@@ -1,3 +1,5 @@
-testquestion = input("Testing:")
+testquestion = "Testing:"
 
-print(testquestion)
+if "ing" in testquestion:
+    print(testquestion)
+

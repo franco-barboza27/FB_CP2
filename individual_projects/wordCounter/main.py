@@ -1,10 +1,12 @@
 # FB 1st word counter
 
-# import the source files
+# import the source files (mostly not simplified to keep track of where a function is from)
 import csvmanipulator as cm
 import dochandler as dh
 import timekeeper as tk
-import helpers as help
+from helpers import *
+
+import sys
 
 # introduce the user to the program (edits docs, saves word count, saves most recent time editted)
 print("Hello! This is a document word count and edit date tracker")
@@ -19,7 +21,7 @@ def firstmenu():
     while True:
         file = input("What is the EXACT direct file path to your file?")
         file = dh.fileformatter(file)
-        istext = dh.filechecker(file)
+        istext = dh.filetypecheck(file)
         
         if istext == True:
             database = cm.datamaker()
@@ -58,9 +60,10 @@ def firstmenu():
 
     # go back to the beginning of the main loop
 
-def mainmenu(file, data):
+def mainmenu(filepath, data):
+
     ask = print("You may: \n1. Update this document \n2. View this document \n3. Add to this document \n4. Switch files \n5. EXIT the program\n")
-    answer = help.inputchecker(5)
+    answer = inputchecker(5)
 
     match answer:
         case 1:
@@ -69,7 +72,10 @@ def mainmenu(file, data):
             dh.docview
         case 3:
             dh.docadd
-        case 4
+        case 4:
+            firstmenu()
+        case 5:
+            sys.exit()
 
 if __name__ == "__main__":
     pass
