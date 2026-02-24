@@ -1,0 +1,2 @@
+This is the EXAMPLE doc
+use it to TEST the code!

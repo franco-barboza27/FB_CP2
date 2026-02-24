@@ -20,7 +20,6 @@ print("You can also replace or add new information to documents. It ONLY works a
 def firstmenu():
     while True:
         file = input("What is the EXACT direct file path to your file?")
-        file = dh.fileformatter(file)
         istext = dh.filetypecheck(file)
         
         if istext == True:
@@ -62,21 +61,22 @@ def firstmenu():
 
 def mainmenu(filepath, data):
 
-    ask = print("You may: \n1. Update this document \n2. View this document \n3. Add to this document \n4. Switch files \n5. EXIT the program\n")
-    answer = inputchecker(5)
+    while True:
 
-    match answer:
-        case 1:
-            dh.docreplace
-        case 2:
-            dh.docview
-        case 3:
-            dh.docadd
-        case 4:
-            firstmenu()
-        case 5:
-            sys.exit()
+        ask = print("You may: \n1. Update this document \n2. View this document \n3. Add to this document \n4. Switch files \n5. EXIT the program\n")
+        answer = inputchecker(5)
+
+        match answer:
+            case 1:
+                dh.replacer(filepath)
+            case 2:
+                dh.viewer(filepath)
+            case 3:
+                dh.adder(filepath)
+            case 4:
+                break
+            case 5:
+                sys.exit()
 
 if __name__ == "__main__":
-    pass
-    # function call
+    firstmenu()

@@ -21,6 +21,13 @@ def filetypecheck(filepath):
             error = errormaker + stringer
     except:
         return False
+    
+    return True
+
+def fileformatter(filepath):
+    for character in filepath:
+        if character == "\\":
+            character = "/"
 
 # REPLACE function
 
@@ -71,14 +78,17 @@ def adder(filepath, text):
                         # check if the NEXT character IS
                             # if it is, add 1 to the word counter
                     # if it is a space, go on to the next letter
-def wordcounter(text):
+                    
+def wordcounter(textpath):
+
+    text = textlister(textpath)
 
     wordcount = 0
 
     for item in text:
         currentchar = 0
         for character in item:
-            if character is not " ":
+            if character != " ":
                 if item[currentchar+1] == " ":
                     wordcount += 1
             
@@ -92,6 +102,23 @@ def wordcounter(text):
         # loop over every line in the file
             # print the line
 
-def viewer(text):
+def viewer(textpath):
+
+    text = textlister(textpath)
+
     for item in text:
         print(item)
+
+# TXT database maker
+    # open in mode write
+        # add each line to a list
+
+def textlister(filepath):
+
+    text = []
+
+    with open(filepath, mode="r", newline="") as file:
+        for line in file:
+            text.append(line)
+
+    return text
