@@ -70,7 +70,7 @@ def mainmenu(filepath, data):
 
         cm.datasaver(data, details)
 
-        print("You may: \n1. Replace this document \n2. View this document \n3. Add to this document \n4. Switch files \n5. View document details \n6. EXIT the program\n")
+        print("\n\nYou may: \n1. Replace this document \n2. View this document \n3. Add to this document \n4. Switch files \n5. View document details \n6. EXIT the program\n")
         answer = inputchecker(6)
 
         match answer:

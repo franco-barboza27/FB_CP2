@@ -7,7 +7,7 @@ def textgetter():
 
     text = []
 
-    print("Enter the return/enter button twice (without spaces or tabs in between!) to stop typing!")
+    print("\n\n\nEnter the return/enter button twice (without spaces or tabs in between!) to stop typing!")
     print("What will you type:\n")
 
     while True:
