@@ -3,6 +3,23 @@
 # viewer
 # count words
 
+def textgetter():
+
+    text = []
+
+    print("Enter the return/enter button twice (without spaces or tabs in between!) to stop typing!")
+    print("What will you type:\n")
+
+    while True:
+        sentence = input("")
+
+        if sentence == "":
+            break
+
+        text.append(sentence)
+    
+    return text
+
 # FILE TYPE checker
 
     # check the type of the file (make sure it is a .txt)
@@ -37,11 +54,13 @@ def fileformatter(filepath):
         # for every item in the new text list
             # write the line to the TXT file
 
-def replacer(filepath, text):
+def replacer(filepath):
+
+    text = textgetter()
 
     with open(filepath, mode="w") as file:
 
-        file.truncate[0]
+        file.truncate()
 
         for item in text:
             file.write(item)
@@ -54,12 +73,14 @@ def replacer(filepath, text):
         # for every item in the list of new text
             # add it to the end of the TXT file
 
-def adder(filepath, text):
+def adder(filepath):
+
+    text = textgetter()
     
     with open(filepath, mode="a") as file:
         
         for item in text:
-            file.write(text)
+            file.write(f"\n{item}")
 
 ## wow! time for the actual assignment name!
 
@@ -78,7 +99,7 @@ def adder(filepath, text):
                         # check if the NEXT character IS
                             # if it is, add 1 to the word counter
                     # if it is a space, go on to the next letter
-                    
+
 def wordcounter(textpath):
 
     text = textlister(textpath)
@@ -89,8 +110,11 @@ def wordcounter(textpath):
         currentchar = 0
         for character in item:
             if character != " ":
-                if item[currentchar+1] == " ":
-                    wordcount += 1
+                try:
+                    if item[currentchar+1] == " ":
+                        wordcount += 1
+                except:
+                    break
             
             currentchar += 1
     

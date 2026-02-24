@@ -9,7 +9,7 @@ import datetime as d
 
     # return the time!
 
-def timewriter():
+def timemaker():
     currenttime = d.datetime.now()
 
     times = []
@@ -26,6 +26,11 @@ def timewriter():
     times.append(currenthour)
     times.append(currentminute)
 
+    formattedtime = timeformatter(times)
+
+    return formattedtime
+
+def timeformatter(times):
     match times[1]:
         case 1:
             times[1] = "January"

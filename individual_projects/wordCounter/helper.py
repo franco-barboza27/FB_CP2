@@ -1,4 +1,5 @@
 # input checking function from a previous project
+# this file was supposed to have more, but I ended up not making any other helper functions
 def inputchecker(rangeofchoices):
     while True:
             choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices}):\n")

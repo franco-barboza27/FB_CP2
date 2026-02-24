@@ -1,2 +1,5 @@
-This is the EXAMPLE doc
-use it to TEST the code!
+This has 3 words
+Now it has MORE words, HORAHHHH
+I am adding many things
+I am ADDING stuff to the document!
+Adding even MORE stuffs

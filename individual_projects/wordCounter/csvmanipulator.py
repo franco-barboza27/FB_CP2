@@ -27,11 +27,11 @@ def datamaker():
                         thisdate = line[1]
                         thiscount = line[2]
 
-                        files[-1]["title"] = thispath
-                        files[-1]["author"] = thisdate
-                        files[-1]["year"] = thiscount
+                        files[-1]["File path"] = thispath
+                        files[-1]["Last updated"] = thisdate
+                        files[-1]["Word count"] = thiscount
     except:
-        files = [{"File path":"file path example", "last updated":"example update date", "word count":"example word count"}]
+        files = [{"File path":"file path example", "Last updated":"example update date", "Word count":"example word count"}]
     
     return files
 
@@ -47,9 +47,14 @@ def datamaker():
 def datasaver(filebase, fileneeded):
     files = []
 
+    if not filebase:
+        filebase.append(fileneeded)
+
     for file in filebase:
         if file["File path"] == fileneeded["File path"]:
-            file = fileneeded
+            file = fileneeded.copy()
+        else:
+            continue
         
         files.append(file["File path"])
     
@@ -60,13 +65,13 @@ def datasaver(filebase, fileneeded):
             
 def filesaver(filebase):
 
-    with open("individual_projects/libraryUpdate/books.csv", mode="w") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames = ["File Path", "Last updated", "Word count"], delimiter=",")
-        heading = ["File Path", "Last updated", "Word count"]
+    with open("individual_projects/wordCounter/docdetails.csv", mode="w") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames = ["File path", "Last updated", "Word count"], delimiter=",")
+        heading = ["File path", "Last updated", "Word count"]
         writer.writeheader()
         # writer.writerow(file, )
         
         for file in filebase:
             keylings = list(file.keys())
             value = list(file.values())
-            writer.writerow({keylings[0]:value[0], keylings[1]:value[1], keylings[2]: value[2], keylings[3]: value[3]})
+            writer.writerow({keylings[0]:value[0], keylings[1]:value[1], keylings[2]: value[2]})
