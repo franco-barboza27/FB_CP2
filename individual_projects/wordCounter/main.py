@@ -61,14 +61,12 @@ def firstmenu():
 
 def mainmenu(filepath, data):
 
-    wordcount = dh.wordcounter(filepath)
-    edittime = tk.timemaker()
-
     while True:
-
-        details = {"File path":filepath, "Last updated":edittime, "Word count":wordcount}
-
-        cm.datasaver(data, details)
+        try:
+            details = {"File path":filepath, "Last updated":edittime, "Word count":wordcount}
+            cm.datasaver(data, details)
+        except:
+            pass
 
         print("\n\nYou may: \n1. Replace this document \n2. View this document \n3. Add to this document \n4. Switch files \n5. View document details \n6. EXIT the program\n")
         answer = inputchecker(6)
@@ -87,7 +85,16 @@ def mainmenu(filepath, data):
             case 4:
                 break
             case 5:
-                print(f"Last update : {details["Last updated"]}\nCurrent word count : {details['Word count']}")
+                files = []
+                for file in data:
+                    if file["File path"] == filepath:
+                        try:
+                            print(f"Last update : {details["Last updated"]}\nCurrent word count : {details['Word count']}")
+                        except:
+                            pass
+                    files.append(file["File path"])
+                if filepath not in files:
+                    print("Sorry, but this file hasn't been edited yet!")
             case 6:
                 sys.exit()
         

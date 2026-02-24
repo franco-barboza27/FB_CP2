@@ -45,20 +45,28 @@ def datamaker():
     # replace the old CSV file with the database (which would be the same) and the additional value
 
 def datasaver(filebase, fileneeded):
-    files = []
 
-    if not filebase:
+    try:
+        filebase[0]
+        if filebase[0]:
+            pass
+        else:
+            filebase.append(fileneeded)
+    except:
         filebase.append(fileneeded)
 
+    count = 0
+    filepaths = []
     for file in filebase:
+        filepaths.append(file["File path"])
+
         if file["File path"] == fileneeded["File path"]:
-            file = fileneeded.copy()
+            filebase[count] = fileneeded
         else:
             continue
-        
-        files.append(file["File path"])
+        count += 1
     
-    if fileneeded["File path"] in files:
+    if fileneeded["File path"] not in filepaths:
         filebase.append(fileneeded)
         
     filesaver(filebase)
