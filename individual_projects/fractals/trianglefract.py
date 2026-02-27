@@ -10,15 +10,34 @@ def triangle(recursionsamount,drawer):
 
     drawer.teleport(-100, -100)
 
-    for recursion in range(recursionsamount):
-        for i in range(3):
-            drawer.forward(trisize)
-            drawer.left(120)
+    for i in range(3):
+        drawer.forward(trisize)
+        drawer.left(120)
+    
+    drawer.forward(trisize*.5)
+    drawer.left(120)
+    drawer.forward(trisize*.5)
+    drawer.right(120)
+    drawer.forward(trisize*.5)
+    drawer.right(120)
+    drawer.forward(trisize*.5)
+    drawer.right(60)
+    drawer.forward(trisize*.5)
+    drawer.right(180)
+    
+    """for i in range(3):
+        drawer.right(120)
+        drawer.forward(trisize)
+    
+    for i in range(3):
+        drawer.right(60)
+        drawer.forward(trisize)"""
+        
 
     triangle(recursionsamount-1, drawer)
 
 drawer = t.Turtle()
-drawer.hideturtle()
+"""drawer.hideturtle()"""
 
 
 triangle(5, drawer)
