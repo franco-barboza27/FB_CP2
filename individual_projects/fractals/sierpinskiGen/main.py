@@ -1,4 +1,4 @@
-import triangleFract, helpers
+import individual_projects.fractals.sierpinskiGen.triangleFract as triangleFract, individual_projects.fractals.sierpinskiGen.helpers as helpers
 import turtle
 
 # ask for the kind of pattern (tree or triangle)
