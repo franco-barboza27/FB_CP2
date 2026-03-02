@@ -1,7 +1,7 @@
 # FRACTAL GENERATOR
 ***
 ![This is an image of the terminal when you run it](terminalrunning.png)
-![This is an image of the triangle mid-generation](individual_projects\fractals\sierpinskigeneration.png)
+![This is an image of the triangle mid-generation](sierpinskigeneration.png)
 ***
 PARAGRAPH description of the program
 
