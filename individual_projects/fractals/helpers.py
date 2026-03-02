@@ -19,7 +19,7 @@ def turtlesetup():
     if choice == 0:
         return drawer
     else:
-        drawer.color(color[choice-1])
+        drawer.color(colors[choice-1])
         return drawer
     # return the drawing object
 

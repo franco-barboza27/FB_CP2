@@ -27,5 +27,3 @@ def sierpinski_pattern(recursions, size, drawer):
         drawer.forward(size * 2**(recursions-1))
         sierpinski_pattern(recursions-1, size, drawer)
         drawer.forward(size * 2**(recursions-1))
-
-t.done()

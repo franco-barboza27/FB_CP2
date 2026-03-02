@@ -1,4 +1,5 @@
 import triangleFract, helpers
+import turtle
 
 # ask for the kind of pattern (tree or triangle)
 # ask for the amount of depth in the pattern (bigger = more repeats)
@@ -21,7 +22,6 @@ def main():
 
     # check what the depth for their pattern will be and make sure it works
 
-    depth += 1
     pen = helpers.turtlesetup()
 
     match fractal:
@@ -33,3 +33,5 @@ print("Hello, this is a fractal generator!")
 print("It can generate a sierpinski triangle, and eventually a fractal tree (lets hope :)")
 
 main()
+
+turtle.done()
