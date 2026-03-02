@@ -4,8 +4,6 @@ import time
 def triangle(recursionsamount,drawer):
     if recursionsamount == 0: return recursionsamount
 
-    drawer.speed(0)
-
     trisize = 1000 * (.5**recursionsamount)
 
     drawer.teleport(-100, -100)
@@ -37,6 +35,7 @@ def triangle(recursionsamount,drawer):
     triangle(recursionsamount-1, drawer)
 
 drawer = t.Turtle()
+drawer.speed(0)
 """drawer.hideturtle()"""
 
 
