@@ -1,6 +1,9 @@
 import datetime as d
 
-filebase =[]
+filebase =[[1,2, 3,4], [5,24,51], [6,9,4]]
+
+if [1, 2, 3, 4] in filebase:
+    print("True")
 
 filebase[0]
 
