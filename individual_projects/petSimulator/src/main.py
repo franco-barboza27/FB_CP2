@@ -1,5 +1,8 @@
 # FB Pet Simulator
 
+import pathlib
+
+
 def inputchecker(rangeofchoices):
     while True:
             choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices}):\n")
@@ -47,16 +50,22 @@ def main():
             print("Great! Let's load a save!")
             print("Here are your save files:")
 
-            with open("individual_projects\petSimulator\saves.txt", mode="r") as file:
+            basepath = pathlib.Path(__file__).resolve().parent
+            filepath = basepath.parent / 'resources' / 'saves.csv'
+            with open(filepath, mode="r") as file:
                 saves = []
                 reader = file.readlines()
-
                 for line in reader:
                     saves.append(line.strip())
-            print(f"1. {saves[0]}\n2. {saves[1]}\n3. {saves[2]}")
 
-            choice = inputchecker(3)
-            loadsave(choice) #load save function
+            count = 1
+            for save in saves:
+                print(f"{count}. {save}")
+                count += 1
+
+            choice = inputchecker(count-1)
+            loadsave(saves[choice-1]) #load save function-
+
 # loading a save
 
     # get the save file
@@ -65,6 +74,9 @@ def main():
             # save the item to a list
         
         # make the pet a class object with all of the information (from the list made previously)
+
+def loadsave(savefileinfo):
+    
 
 # CREATING a save
 
