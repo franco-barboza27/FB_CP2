@@ -5,6 +5,7 @@
 import pathlib
 import datetime
 import turtle
+import random
 
 def strlistconvert(string):
     strlist = []
@@ -30,16 +31,16 @@ class petly:
     def __init__(self, name, species, age, exp, rank, happiness, hunger, thirst, health, athletics, beauty, skills, familytree, sprite=None):
         self.name = name
         self.species = species
-        self.age = age
-        self.exp = exp
+        self.age = int(age)
+        self.exp = int(exp)
         self.rank = rank
         self.sprite = sprite
-        self.happiness = happiness
-        self.hunger = hunger
-        self.thirst = thirst
-        self.health = health
-        self.athletics = athletics
-        self.beauty = beauty
+        self.happiness = int(happiness)
+        self.hunger = int(hunger)
+        self.thirst = int(thirst)
+        self.health = int(health)
+        self.athletics = int(athletics)
+        self.beauty = int(beauty)
 
         skills = strlistconvert(skills)
         skills = listdictconvert(skills)
@@ -48,7 +49,19 @@ class petly:
         familytree = strlistconvert(familytree)
         self.familytree = familytree
 
-    def feed(food, hunger, thirst)
+    def feed(self, hunger, thirst):
+        self.hunger += hunger
+        self.thirst += thirst
+        self.health += (thirst+hunger)*.5
+
+        self.health = round(self.health)
+
+        for thing in range(self.hunger, self.thirst, self.health):
+            if thing > 100:
+                thing = 100
+
+        return self.hunger, self.thirst, self.health
+
     def healthchange(self, change):
         self.health += change
     
@@ -84,6 +97,18 @@ class petly:
         
         turtle.done()
 
+    def play(self):
+        print(f"You went to the park with {self.name}!")
+        print("Happiness increased by 10, and 5 athletics!")
+    
+    def encounter(self):
+        encchance = random.randint(1, 10)
+        match encchance:
+            if encchance
+
+    def statcheck(self):
+        for stat in (happiness, hunger, thirst, health, athletics, beauty):
+            
 class userly:
     def __init__(self, username, money, lastlogout, inventory):
         self.username = username
@@ -112,6 +137,22 @@ class userly:
         thirst = self.inventory[itemname][2] + self.inventory[itemname][3]
 
         return itemname, hunger, thirst
+    
+    def inventorysubtract(self, food):
+        items = self.inventory.keys()
+
+        for item in items:
+            if item == food:
+                self.inventory.pop(item)
+        
+        return self.inventory
+
+    def inventoryadd(self, food):
+        foodname = food.keys()
+        foodstats = food.values()
+        self.inventory[foodname[0]] = foodstats[0]
+
+        return self.inventory
 
 def timecheck(user, pets):
     if user.lastlogout != datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"): # if the last logout time is not the same as the current time (which it shouldn't be)
@@ -311,8 +352,11 @@ def gamemenu(user, pets):
                     if choice == 1:
                         print("What would you like to feed them?")
                         foodfed, hunger, thirst = userly.inventoryviewer(user) # inventory viewer function
-                        selectedpet.feed(foodfed, hunger, thirst) # feed function
-                        user.inventoryremove(user, foodfed) # inventory remove function
+                        selectedpet.hunger, selectedpet.thirst, selectedpet.health = selectedpet.feed(hunger, thirst) # feed function
+                        user.inventory = user.inventoryremove(user, foodfed) # inventory remove function
+                    elif choice == 2:
+                        selectedpet.encounter()
+                        selectedpet.play()
                         
 
                 
@@ -399,3 +443,5 @@ def gamemenu(user, pets):
                             # add it to their pet list and subtract the money from their total
                     # otherwise, say they do not have enough money
                         # send them to the pet store menu
+
+main()
