@@ -1,8 +1,161 @@
 # FB Pet Simulator
 
+# in the sprites CSV, the 1st 3 are dogs, the next 3 are cats, the last 3 are rabbit sprites
+
 import pathlib
+import datetime
+import turtle
+
+class petly:
+    def __init__(self, name, species, age, exp, rank, happiness, hunger, thirst, health, athletics, beauty, skills, familytree, sprite=None):
+        self.name = name
+        self.species = species
+        self.age = age
+        self.exp = exp
+        self.rank = rank
+        self.sprite = sprite
+        self.happiness = happiness
+        self.hunger = hunger
+        self.thirst = thirst
+        self.health = health
+        self.athletics = athletics
+        self.beauty = beauty
+        self.skills = skills
+        self.familytree = familytree
+
+    def healthchange(self, change):
+        self.health += change
+    
+    def view(self):
+        return f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    Health: {self.health}%\n    Hunger: {self.hunger}%\n    Thirst: {self.thirst}%"
+    
+    def detailedview(self):
+        details = f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    EXP: {self.exp}\n    Health: {self.health}%\n    Hunger: {self.hunger}%\n    Thirst: {self.thirst}%\n    Happiness: {self.happiness}%\n    Athletics: {self.athletics}\n    Beauty: {self.beauty}\n"
+        print(details)
+        for skill in self.skills.keys():
+            print(f"{skill}: {self.skills[skill]}")
+        
+        writer = turtle.Turtle()
+        writer.up()
+        writer.hideturtle()
+
+        treesize = len(self.familytree)
+
+        writer.goto(-250* round(.9**treesize), 250 * round(.9**treesize))
+
+        count = 0
+        for i in range(len(self.familytree)):
+            count += 1
+            writer.write(self.familytree[-1-i], font=("Arial", 50*round(.5**treesize), "normal"))
+            if count % 2 != 0:
+                writer.goto(writer.xcor() + 100* round(.9**treesize), writer.ycor())
+            elif count % 2 == 0:
+                writer.goto(-250 - 50* round(.9**treesize), writer.ycor() - 50* round(.9**treesize))
+        
+        writer.goto(writer.xcor() + 50, writer.ycor() + 20)
+        
+        writer.write(self.name, font=("Arial", 50*round(.5**treesize), "normal"))
+        
+        turtle.done()
+
+class userly:
+    def __init__(self, username, money, lastlogout, inventory):
+        self.username = username
+        self.money = money
+        self.lastlogout = lastlogout
+        self.inventory = inventory
+    
+    def inventoryviewer(self):
+        count = 1
+        for item in self.inventory.keys():
+            print(f"{count}. {item} (x{self.inventory[item]})")
+            count += 1
+        
+        choice = inputchecker(count-1)
+
+        return list(self.inventory.keys())[choice-1]
+
+def savesgetter():
+
+                basepath = pathlib.Path(__file__).resolve().parent
+                filepath = basepath.parent / 'resources' / 'saves.csv'
+                with open(filepath, mode="r") as file:
+                    saves = {}
+                    reader = file.readlines()
+                    for line in reader:
+                        save = line.split(",") # split the line into save name and save file path
+                        saves[save[0]] = save[1] # use the first element as the key and second as value (save name and save info)
+
+                return saves
+
+# loading a save
+
+    # get the save file
+    # for every pet in the save
+        # for every item in the pet info
+            # save the item to a list
+        
+        # make the pet a class object with all of the information (from the list made previously)
+
+def loadsave(savefileinfo):
+    saves = savesgetter()
+    pets = []
+    user = {}
+
+    for save in saves.keys():
+        if save == savefileinfo:
+            print(f"Loading {save}...")
+            # get the save file path from the saves dictionary
+            savefilepath = saves[save]
+            # open the save file and read the information
+
+            with open(savefilepath, mode="r") as file:
+                reader = file.readlines()
+                count = 0
+                for line in reader:
+                    count += 1
+                    if count == 2:
+                        userinfo = line.split(",")
+
+                        user = userly(userinfo[0], userinfo[1], userinfo[2], userinfo[3]) # make the user a class object with all of the information (from the list made previously)
+                    else:
+                        petinfo = line.split(",") # split the line into pet information
+                        thispet = petly(petinfo[0], petinfo[1], petinfo[2], petinfo[3], petinfo[4], petinfo[5], petinfo[6], petinfo[7], petinfo[8], petinfo[9], petinfo[10], petinfo[11], petinfo[12]) # make the pet a class object with all of the information (from the list made previously)
+                        pets.append(thispet) # add the pet information to the pets list
+                        
+                    # make the pet a class object with all of the information (from the list made previously)
+
+    return user, pets
+                
+def newsavefile(newsave):
+    basepath = pathlib.Path(__file__).resolve().parent
+    filepath = basepath.parent / 'resources'
+    with open(filepath, mode="w") as file:
+        file.write(f"{newsave}, {basepath.parent / 'resources' / (newsave+'.csv')}\n") # add the new save to the saves file
+
+    username = input(f"Enter your username:\n")
+
+    with open(basepath.parent / 'resources' / (newsave+'.csv'), mode="w") as file: # create the new save file
+        file.write("Name, species, age, EXP, rank, happiness, hunger, thirst, health, athletics, beauty, skills, family tree\n") # write the pet information categories to the save file
+        file.write(f"{username}, {0}, {datetime.datetime.now()}, {{}}\n") # write the user information categories to the save file
+
+    user = userly(username, 0, datetime.datetime.now(), {}) # make the user a class object with all of the information (from the list made previously)
+    petname = input("What would you like to name your first pet?:\n")
+    firstpet = petly(petname, "dog", 0, 0, "F", 50, 100, 100, 100, 10, 10, {"Smell":f"{petname} smells a nearby dog!"}, []) # make the first pet a class object with all of the information (from the list made previously)
 
 
+    return user, firstpet
+
+# CREATING a save
+
+    # ask what file they want to save to
+        # create a file with that name
+            # add a tutorial pet called "first pet"
+        
+        # make the first pet a class object
+
+# either way, go to the main GAME loop
+    
 def inputchecker(rangeofchoices):
     while True:
             choicevar = input(f"Which one would you like to choose?(1~{rangeofchoices}):\n")
@@ -44,50 +197,84 @@ def main():
             print("Great! Let's start a new game!")
             newsave = input("What would you like to name your save file? (Do worry, you CAN'T change it later!):\n")
 
-            save = newsavefile(newsave) #new save/tutorial function
+            newsave = newsave.replace(",", "") # replace commas with nothing to make not break csv
+
+            user, pets = newsavefile(newsave) # new save function
 
         case 2:
             print("Great! Let's load a save!")
             print("Here are your save files:")
 
-            basepath = pathlib.Path(__file__).resolve().parent
-            filepath = basepath.parent / 'resources' / 'saves.csv'
-            with open(filepath, mode="r") as file:
-                saves = []
-                reader = file.readlines()
-                for line in reader:
-                    saves.append(line.strip())
+            saves = savesgetter()
 
             count = 1
-            for save in saves:
+            for save in saves.keys():
                 print(f"{count}. {save}")
                 count += 1
 
             choice = inputchecker(count-1)
-            loadsave(saves[choice-1]) #load save function-
+            user, pets = loadsave(list(saves.keys())[choice-1]) # load save function-
 
-# loading a save
+    gamemenu(user, pets) # gamemenu function
 
-    # get the save file
-    # for every pet in the save
-        # for every item in the save
-            # save the item to a list
-        
-        # make the pet a class object with all of the information (from the list made previously)
+def gamemenu(user, pets):
+    if user.lastlogout != datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"): # if the last logout time is not the same as the current time (which it shouldn't be)
 
-def loadsave(savefileinfo):
-    
+        lastlogout = datetime.datetime.strptime(user.lastlogout, "%Y-%m-%d %H:%M:%S") # convert the last logout time to a datetime object
+        now = datetime.datetime.now() # get the current time as a datetime object
+        timegone = now - lastlogout # calculate the time gone as a timedelta object
 
-# CREATING a save
+        for pet in pets: # for every pet, update their stats based on how long they have been gone
+            pet.hunger = pet.hunger - 0.5 * timegone.total_hours() # decrease hunger by .5 for every hour gone
+            pet.thirst = pet.thirst - 0.5 * timegone.total_hours() # decrease thirst by .5 for every hour gone
 
-    # ask what file they want to save to
-        # create a file with that name
-            # add a tutorial pet called "first pet"
-        
-        # make the first pet a class object
+            pet.healthchange(-2 * (0.5 * timegone.total_hours())) # change the pet's health based on their hunger and thirst
 
-# either way, go to the main GAME loop
+            if pet.health <= 0: # if health reaches 0, die
+                print(f"{pet.name} has died of neglect... :(\nThis kind of thing takes a while. How could you let {pet.name} die? They were your friend! :(((")
+                pets.remove(pet) # remove the pet from the pets list
 
+
+    while True:
+        print(f"welcome, {user.username}!")
+        print("What would you like to do?")
+        print("1. View pets\n2. Breed pets\n3. Play a contest\n4. Grocery store\n5. Pets store")
+        choice = inputchecker(5)
+
+        match choice:
+            case 1:
+                count = 1
+                for pet in pets:
+                    count += 1
+                    print(f"{count}. {pet.view()}") # pet viewer function
+
+                print("1. Select a pet\n2. Go back to menu")
+
+                choice = inputchecker(2)
+
+                if choice == 1:
+                    print("Which pet would you like to select?")
+                    choice = inputchecker(count-1)
+
+                    selectedpet = pets[choice-1] # selected pet
+
+                    selectedpet.detailedview() # pet detailed viewer function
+
+                    print(f"You have selected {selectedpet.name}!\nWhat would you like to do with {selectedpet.name}?")
+                    print("1. Feed\n2. Play\n3. Train\n4. Groom")
+                    choice = inputchecker(4)
+
+                    if choice == 1:
+                        print("What would you like to feed them?")
+                        foodfed = userly.inventoryviewer(user) # inventory viewer function
+                        selectedpet.feed(foodfed) # feed function
+                        user.inventoryremove(user, foodfed) # inventory remove function
+                        
+
+                
+            case 2:
+                pass
+                
 # Game Loop
 
     # Display the menu
