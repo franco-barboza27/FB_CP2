@@ -1,2 +1,3 @@
-Name, species, age, EXP, rank, happiness, hunger, thirst, health, athletics, beauty, skills, family tree
-username, money, last logout, inventory
+Name,species,age,EXP,rank,happiness,hunger,thirst,health,athletics,beauty,skills,family tree
+username,money,last logout,inventory
+testpet,dog,12,25,B,86,70,100,93, 45, 60, {sniff:"your dog sniffed a tree!"}, [previoustest|test2]

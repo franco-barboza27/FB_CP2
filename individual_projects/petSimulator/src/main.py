@@ -6,6 +6,26 @@ import pathlib
 import datetime
 import turtle
 
+def strlistconvert(string):
+    strlist = []
+    tempstr = ""
+    for char in string:
+        if char != ",":
+            tempstr = f"{tempstr}"+f"{char}"
+        else:
+            strlist.append(tempstr)
+            tempstr = ""
+
+    return strlist
+
+def listdictconvert(listitem):
+    dictversion = {}
+    for item in listitem:
+        keypair = item.split(":")
+        dictversion[keypair[0]] = keypair[1]
+
+    return dictversion
+
 class petly:
     def __init__(self, name, species, age, exp, rank, happiness, hunger, thirst, health, athletics, beauty, skills, familytree, sprite=None):
         self.name = name
@@ -20,9 +40,15 @@ class petly:
         self.health = health
         self.athletics = athletics
         self.beauty = beauty
+
+        skills = strlistconvert(skills)
+        skills = listdictconvert(skills)
         self.skills = skills
+        
+        familytree = strlistconvert(familytree)
         self.familytree = familytree
 
+    def feed(food, hunger, thirst)
     def healthchange(self, change):
         self.health += change
     
@@ -63,17 +89,48 @@ class userly:
         self.username = username
         self.money = money
         self.lastlogout = lastlogout
+
+        inventory = strlistconvert(inventory)
+        inventory = listdictconvert(inventory)
         self.inventory = inventory
     
     def inventoryviewer(self):
         count = 1
         for item in self.inventory.keys():
-            print(f"{count}. {item} (x{self.inventory[item]})")
+            hunger = self.inventory[item][0] + self.inventory[item][1]
+            hunger = int(hunger)
+            thirst = self.inventory[item][2] + self.inventory[item][3]
+            thirst = int(thirst)
+
+            print(f"{count}. {item} : Hunger--{hunger}, Thirst--{thirst}")
             count += 1
         
+        print("You may select an item")
         choice = inputchecker(count-1)
+        itemname = list(self.inventory.keys())[choice-1]
+        hunger = self.inventory[itemname][0] + self.inventory[itemname][1]
+        thirst = self.inventory[itemname][2] + self.inventory[itemname][3]
 
-        return list(self.inventory.keys())[choice-1]
+        return itemname, hunger, thirst
+
+def timecheck(user, pets):
+    if user.lastlogout != datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"): # if the last logout time is not the same as the current time (which it shouldn't be)
+
+        lastlogout = datetime.datetime.strptime(user.lastlogout, "%Y-%m-%d %H:%M:%S") # convert the last logout time to a datetime object
+        now = datetime.datetime.now() # get the current time as a datetime object
+        timegone = now - lastlogout # calculate the time gone as a timedelta object
+
+        for pet in pets: # for every pet, update their stats based on how long they have been gone
+            pet.hunger = pet.hunger - 0.5 * timegone.total_hours() # decrease hunger by .5 for every hour gone
+            pet.thirst = pet.thirst - 0.5 * timegone.total_hours() # decrease thirst by .5 for every hour gone
+
+            pet.healthchange(-2 * (0.5 * timegone.total_hours())) # change the pet's health based on their hunger and thirst
+
+            if pet.health <= 0: # if health reaches 0, die
+                print(f"{pet.name} has died of neglect... :(\nThis kind of thing takes a while. How could you let {pet.name} die? They were your friend! :(((")
+                pets.remove(pet) # remove the pet from the pets list
+    
+    return user, pets
 
 def savesgetter():
 
@@ -218,25 +275,12 @@ def main():
     gamemenu(user, pets) # gamemenu function
 
 def gamemenu(user, pets):
-    if user.lastlogout != datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"): # if the last logout time is not the same as the current time (which it shouldn't be)
-
-        lastlogout = datetime.datetime.strptime(user.lastlogout, "%Y-%m-%d %H:%M:%S") # convert the last logout time to a datetime object
-        now = datetime.datetime.now() # get the current time as a datetime object
-        timegone = now - lastlogout # calculate the time gone as a timedelta object
-
-        for pet in pets: # for every pet, update their stats based on how long they have been gone
-            pet.hunger = pet.hunger - 0.5 * timegone.total_hours() # decrease hunger by .5 for every hour gone
-            pet.thirst = pet.thirst - 0.5 * timegone.total_hours() # decrease thirst by .5 for every hour gone
-
-            pet.healthchange(-2 * (0.5 * timegone.total_hours())) # change the pet's health based on their hunger and thirst
-
-            if pet.health <= 0: # if health reaches 0, die
-                print(f"{pet.name} has died of neglect... :(\nThis kind of thing takes a while. How could you let {pet.name} die? They were your friend! :(((")
-                pets.remove(pet) # remove the pet from the pets list
-
+    print(f"welcome, {user.username}!")
 
     while True:
-        print(f"welcome, {user.username}!")
+        timecheck(user, pets)
+        user.lastlogout = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         print("What would you like to do?")
         print("1. View pets\n2. Breed pets\n3. Play a contest\n4. Grocery store\n5. Pets store")
         choice = inputchecker(5)
@@ -245,8 +289,8 @@ def gamemenu(user, pets):
             case 1:
                 count = 1
                 for pet in pets:
-                    count += 1
                     print(f"{count}. {pet.view()}") # pet viewer function
+                    count += 1
 
                 print("1. Select a pet\n2. Go back to menu")
 
@@ -254,7 +298,7 @@ def gamemenu(user, pets):
 
                 if choice == 1:
                     print("Which pet would you like to select?")
-                    choice = inputchecker(count-1)
+                    choice = inputchecker(count)
 
                     selectedpet = pets[choice-1] # selected pet
 
@@ -266,8 +310,8 @@ def gamemenu(user, pets):
 
                     if choice == 1:
                         print("What would you like to feed them?")
-                        foodfed = userly.inventoryviewer(user) # inventory viewer function
-                        selectedpet.feed(foodfed) # feed function
+                        foodfed, hunger, thirst = userly.inventoryviewer(user) # inventory viewer function
+                        selectedpet.feed(foodfed, hunger, thirst) # feed function
                         user.inventoryremove(user, foodfed) # inventory remove function
                         
 
