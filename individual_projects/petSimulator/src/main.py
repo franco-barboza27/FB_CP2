@@ -104,10 +104,28 @@ class petly:
     def encounter(self):
         encchance = random.randint(1, 10)
         match encchance:
-            if encchance
+            case 1:
+                print(f"{self.name} encountered a friendly animal!")
+            case 2:
+                print(f"{self.name} found a tasty treat!")
+            case 4:
+                print(f"{self.name} met a new friend!")
+            case 6:
+                print(f"{self.name} found a stick!")
+            case 7:
+                print(f"{self.name} had a fun adventure!")
+
+        self.happiness += 20
+
+        self.statcheck()
+        
+        print(f"After having fun playing at the park, {self.name} is feeling great!")
+        print(f"Although, now it's time to head home.")
 
     def statcheck(self):
-        for stat in (happiness, hunger, thirst, health, athletics, beauty):
+        for stat in (self.happiness, self.hunger, self.thirst, self.health, self.athletics, self.beauty):
+            if stat > 100:
+                stat = 100
             
 class userly:
     def __init__(self, username, money, lastlogout, inventory):
@@ -155,11 +173,13 @@ class userly:
         return self.inventory
 
 def timecheck(user, pets):
+    user.lastlogout = user.lastlogout.replace(microsecond=0)
+
     if user.lastlogout != datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"): # if the last logout time is not the same as the current time (which it shouldn't be)
 
-        lastlogout = datetime.datetime.strptime(user.lastlogout, "%Y-%m-%d %H:%M:%S") # convert the last logout time to a datetime object
+        lastlog = datetime.datetime.strptime(f"{user.lastlogout}", "%Y-%m-%d %H:%M:%S") # convert the last logout time to a datetime object
         now = datetime.datetime.now() # get the current time as a datetime object
-        timegone = now - lastlogout # calculate the time gone as a timedelta object
+        timegone = now - lastlog # calculate the time gone as a timedelta object
 
         for pet in pets: # for every pet, update their stats based on how long they have been gone
             pet.hunger = pet.hunger - 0.5 * timegone.total_hours() # decrease hunger by .5 for every hour gone
@@ -227,9 +247,9 @@ def loadsave(savefileinfo):
                 
 def newsavefile(newsave):
     basepath = pathlib.Path(__file__).resolve().parent
-    filepath = basepath.parent / 'resources'
+    filepath = basepath.parent / 'resources' / (newsave+'.csv')
     with open(filepath, mode="w") as file:
-        file.write(f"{newsave}, {basepath.parent / 'resources' / (newsave+'.csv')}\n") # add the new save to the saves file
+        file.write(f"{newsave}, {filepath}\n") # add the new save to the saves file
 
     username = input(f"Enter your username:\n")
 
