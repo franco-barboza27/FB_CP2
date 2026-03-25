@@ -27,6 +27,34 @@ def listdictconvert(listitem):
 
     return dictversion
 
+def petgen(species, rank):
+    pet = []
+    names = [f"Jake's {species}", f"Molly's {species}", f"Charlie’s {species}", f"Bella's {species}", f"Max's {species}", f"Lucy’s {species}", f"Rocky's {species}", f"Daisy's {species}", f"Toby's {species}"]
+    ranks = ["F", "E", "D", "C", "B", "A", "S"]
+
+    if species == "dog":
+        sprite = pet.append(random.randint(1, 3))
+    elif species == "cat":
+        sprite = pet.append(random.randint(4, 6))
+    elif species == "rabbit":
+        sprite = pet.append(random.randint(7, 9))
+
+    rankgrade = ranks.index(rank)+1
+
+    health = 100
+    hunger = 100
+    thirst = 100
+    happiness = 50
+    athletics = round(rankgrade * 10 * (random.random()+.1))
+    beauty = round(rankgrade * 10 * random.random())
+    exp = 0
+    age = random.randint(0, 20)
+    familytree = []
+    skills = {"Smell":f"This pet can smell things around them!"}
+    name = random.choice(names)
+
+    return petly(name, species, age, exp, rank, happiness, hunger, thirst, health, athletics, beauty, skills, familytree)
+
 class petly:
     def __init__(self, name, species, age, exp, rank, happiness, hunger, thirst, health, athletics, beauty, skills, familytree, sprite=None):
         self.name = name
@@ -56,14 +84,13 @@ class petly:
 
         self.health = round(self.health)
 
-        for thing in range(self.hunger, self.thirst, self.health):
-            if thing > 100:
-                thing = 100
+        self.statcheck()
 
         return self.hunger, self.thirst, self.health
 
     def healthchange(self, change):
         self.health += change
+        self.statcheck()
     
     def view(self):
         return f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    Health: {self.health}%\n    Hunger: {self.hunger}%\n    Thirst: {self.thirst}%"
@@ -95,11 +122,14 @@ class petly:
         
         writer.write(self.name, font=("Arial", 50*round(.5**treesize), "normal"))
         
-        turtle.done()
+        turtle.Screen().onkey(lambda: turtle.Screen().clear(), "BackSpace")
 
     def play(self):
         print(f"You went to the park with {self.name}!")
-        print("Happiness increased by 10, and 5 athletics!")
+        self.encounter()
+        print(f"Happiness increased by 10, and athletics by 5!")
+        print(f"After having fun playing at the park, {self.name} is feeling great!")
+        print(f"Although, now it's time to head home.")
     
     def encounter(self):
         encchance = random.randint(1, 10)
@@ -116,17 +146,68 @@ class petly:
                 print(f"{self.name} had a fun adventure!")
 
         self.happiness += 20
+        self.athletics += 5
 
         self.statcheck()
-        
-        print(f"After having fun playing at the park, {self.name} is feeling great!")
-        print(f"Although, now it's time to head home.")
 
     def statcheck(self):
         for stat in (self.happiness, self.hunger, self.thirst, self.health, self.athletics, self.beauty):
             if stat > 100:
                 stat = 100
+
+        newskills = {"Run":f"{self.name} can run around the park!", "Jump":f"{self.name} can jump over small obstacles!", "Swim":f"{self.name} can swim in the lake!", "Fetch":f"{self.name} can fetch a ball!", "Dig":f"{self.name} can dig holes in the ground!", "roll over":f"{self.name} can roll over!"}
+        
+        if self.exp >= 50:
+            self.exp = 0
+            ranks = ["F", "E", "D", "C", "B", "A", "S"]
+            if self.rank != "S":
+                self.rank = ranks[ranks.index(self.rank)+1]
+                print(f"{self.name} has ranked up to {self.rank}!")
+                
+                for skill in newskills.keys():
+                    if skill not in self.skills.keys():
+                        self.skills[skill] = newskills[skill]
+                        newskill = skill
+                        
+                        break
+                
+                print(f"{self.name} has learned a new skill: {newskill} : {self.skills[newskill]}!")
+
+            else:
+                print(f"{self.name} is already at the highest rank.")
             
+        if self.hunger <= 0 or self.thirst <= 0:
+            self.hunger = 0
+            self.thirst = 0
+            self.health = 0
+            print(f"{self.name} has died from neglect!")
+    
+    def death(self):
+        print(f"This kind of thing takes a while. How could you let {self.name} die? They were your friend! :(((")
+        # remove the pet from the pets list in the main game loop
+        # maybe add a function to remove the pet from the pets list here? idk if that would work or if it would cause problems with the timecheck function
+
+    def sleep(self):
+        print(f"{self.name} is sleeping... zzz...")
+        self.hunger -= 10
+        self.thirst -= 10
+        self.health += 10
+
+        self.statcheck()
+
+    def compete(self, competitor):
+        score = self.athletics + self.beauty + (self.health*.5)
+        competitorscore = competitor.athletics + competitor.beauty + (competitor.health*.5)
+
+        if score > competitorscore:
+            print(f"{self.name} won the contest against {competitor.name}!")
+            self.exp += 10
+            self.statcheck()
+            return True
+        else:
+            print(f"{competitor.name} won the contest against {self.name}!")
+            return False   
+
 class userly:
     def __init__(self, username, money, lastlogout, inventory):
         self.username = username
@@ -166,45 +247,72 @@ class userly:
         return self.inventory
 
     def inventoryadd(self, food):
-        foodname = food.keys()
-        foodstats = food.values()
-        self.inventory[foodname[0]] = foodstats[0]
+        foodname = list(food.keys())[0]
+        foodstats = list(food.values())[0]
+        self.inventory[foodname] = foodstats
 
-        return self.inventory
+    def shop(self):
+        foods = {"Small Pet Food":"2010", "Medium Pet Food":"4015", "Large Pet Food":"5020", "12 Oz Water":"1020", "16 Oz Water":"1540", "20 Oz Water":"1550"}
+        print(f"Welcome to the shop! You have ${self.money}.")
+        print("What would you like to buy?")
+        count = 1
+        for food in foods.keys():
+            cost = round((int(f"{foods[food][0]}"+f"{foods[food][1]}")+int(f"{foods[food][2]}"+f"{foods[food][3]}"))*.5)
+            print(f"{count}. {food} : Hunger Replenishment: {foods[food][0]}{foods[food][1]}----Thirst Replenishment: {foods[food][2]}{foods[food][3]} -- Cost: ${cost}")
+            print(int(f"{foods[food][0]}"+f"{foods[food][1]}"))
+            print(int(f"{foods[food][2]}"+f"{foods[food][3]}"))
+            count += 1
+        
+        choice = inputchecker(count-1)
+        foodname = list(foods.keys())[choice-1]
+        foodstats = [int(foods[foodname][0] + foods[foodname][1]), int(foods[foodname][2] + foods[foodname][3])]
+        print(foodstats)
+        cost = round((foodstats[0]+foodstats[1])*.5)
+
+        foodbought = {}
+    
+        if self.money >= cost:
+            self.money -= cost
+            foodbought[foodname] = foodstats
+            self.inventoryadd(foodbought)
+            print(f"You bought {foodname} for ${cost}!")
+        else:
+            print("You don't have enough money to buy that! Go earn some more by playing contests!")
 
 def timecheck(user, pets):
-    user.lastlogout = user.lastlogout.replace(microsecond=0)
+    try:
+        user.lastlogout = user.lastlogout.replace(microsecond=0, tzinfo=None) # remove microseconds and timezone information from the last logout time to make it easier to compare with the current time
+    except:
+        pass
 
     if user.lastlogout != datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"): # if the last logout time is not the same as the current time (which it shouldn't be)
 
         lastlog = datetime.datetime.strptime(f"{user.lastlogout}", "%Y-%m-%d %H:%M:%S") # convert the last logout time to a datetime object
         now = datetime.datetime.now() # get the current time as a datetime object
         timegone = now - lastlog # calculate the time gone as a timedelta object
+        
+        timegone = timegone.total_seconds() / 3600 # convert the time gone to hours
 
         for pet in pets: # for every pet, update their stats based on how long they have been gone
-            pet.hunger = pet.hunger - 0.5 * timegone.total_hours() # decrease hunger by .5 for every hour gone
-            pet.thirst = pet.thirst - 0.5 * timegone.total_hours() # decrease thirst by .5 for every hour gone
+            pet.hunger = pet.hunger - 0.5 * timegone # decrease hunger by .5 for every hour gone
+            pet.thirst = pet.thirst - 0.5 * timegone # decrease thirst by .5 for every hour gone
 
-            pet.healthchange(-2 * (0.5 * timegone.total_hours())) # change the pet's health based on their hunger and thirst
-
-            if pet.health <= 0: # if health reaches 0, die
-                print(f"{pet.name} has died of neglect... :(\nThis kind of thing takes a while. How could you let {pet.name} die? They were your friend! :(((")
-                pets.remove(pet) # remove the pet from the pets list
+            pet.healthchange(-2 * (0.5 * timegone)) # change the pet's health based on their hunger and thirst
     
     return user, pets
 
 def savesgetter():
 
-                basepath = pathlib.Path(__file__).resolve().parent
-                filepath = basepath.parent / 'resources' / 'saves.csv'
-                with open(filepath, mode="r") as file:
-                    saves = {}
-                    reader = file.readlines()
-                    for line in reader:
-                        save = line.split(",") # split the line into save name and save file path
-                        saves[save[0]] = save[1] # use the first element as the key and second as value (save name and save info)
+    basepath = pathlib.Path(__file__).resolve().parent
+    filepath = basepath.parent / 'resources' / 'saves.csv'
+    with open(filepath, mode="r") as file:
+        saves = {}
+        reader = file.readlines()
+        for line in reader:
+            save = line.split(",") # split the line into save name and save file path
+            saves[save[0]] = save[1] # use the first element as the key and second as value (save name and save info)
 
-                return saves
+    return saves
 
 # loading a save
 
@@ -257,12 +365,14 @@ def newsavefile(newsave):
         file.write("Name, species, age, EXP, rank, happiness, hunger, thirst, health, athletics, beauty, skills, family tree\n") # write the pet information categories to the save file
         file.write(f"{username}, {0}, {datetime.datetime.now()}, {{}}\n") # write the user information categories to the save file
 
-    user = userly(username, 0, datetime.datetime.now(), {}) # make the user a class object with all of the information (from the list made previously)
+    user = userly(username, 40, datetime.datetime.now(), {}) # make the user a class object with all of the information (from the list made previously)
     petname = input("What would you like to name your first pet?:\n")
-    firstpet = petly(petname, "dog", 0, 0, "F", 50, 100, 100, 100, 10, 10, {"Smell":f"{petname} smells a nearby dog!"}, []) # make the first pet a class object with all of the information (from the list made previously)
+    firstpet = petly(petname, "dog", 0, 0, "F", 50, 100, 100, 100, 10, 10, {}, []) # make the first pet a class object with all of the information (from the list made previously)
+    
+    pets = []
+    pets.append(firstpet)
 
-
-    return user, firstpet
+    return user, pets
 
 # CREATING a save
 
@@ -342,8 +452,15 @@ def gamemenu(user, pets):
         timecheck(user, pets)
         user.lastlogout = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        for pet in pets:
+            pet.statcheck()
+            if pet.health <= 0: # if health reaches 0, die
+                pet.death() # death function
+                pets.remove(pet) # remove the pet from the pets list
+
+        print(f"The time is currently {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, and you have ${user.money}!")
         print("What would you like to do?")
-        print("1. View pets\n2. Breed pets\n3. Play a contest\n4. Grocery store\n5. Pets store")
+        print("1. View pets\n2. Breed pets(W.I.P)\n3. Play a contest\n4. Grocery store\n5. Pets store")
         choice = inputchecker(5)
 
         match choice:
@@ -358,30 +475,76 @@ def gamemenu(user, pets):
                 choice = inputchecker(2)
 
                 if choice == 1:
-                    print("Which pet would you like to select?")
-                    choice = inputchecker(count)
+                    choice = inputchecker(count-1)
 
                     selectedpet = pets[choice-1] # selected pet
-
+                    print("Press BACKSPACE to close the opened window and continue.")
                     selectedpet.detailedview() # pet detailed viewer function
 
                     print(f"You have selected {selectedpet.name}!\nWhat would you like to do with {selectedpet.name}?")
-                    print("1. Feed\n2. Play\n3. Train\n4. Groom")
-                    choice = inputchecker(4)
+                    print("1. Feed\n2. Play\n3. Train(W.I.P)\n4. Groom(W.I.P)\n5. Sleep\n6. Go back to menu")
+                    choice = inputchecker(6)
 
                     if choice == 1:
+                        if len(user.inventory) == 0:
+                            print("You don't have any food or water in your inventory! Go to the grocery store to buy some!")
+                            continue
                         print("What would you like to feed them?")
                         foodfed, hunger, thirst = userly.inventoryviewer(user) # inventory viewer function
                         selectedpet.hunger, selectedpet.thirst, selectedpet.health = selectedpet.feed(hunger, thirst) # feed function
                         user.inventory = user.inventoryremove(user, foodfed) # inventory remove function
                     elif choice == 2:
-                        selectedpet.encounter()
                         selectedpet.play()
-                        
+                    elif choice == 3:
+                        pass # TRAINING FUNCTION GOES HERE __________________________________________________________________________________________________________________________________
+                    elif choice == 4:
+                        pass # GROOMING FUNCTION GOES HERE _________________________________________________________________________________________________________________________________
+                    elif choice == 5:
+                        selectedpet.sleep() 
+                    elif choice == 6:
+                        continue
+            case 2:
+                pass # BREEDING FUNCTION GOES HERE ______________________________________________________________________________________________________________________________________________________
+            case 3:
+                print("What species would you like to play a contest in?")
+                print("1. Dog\n2. Cat\n3. Rabbit")
+                choice = inputchecker(3)
+
+                if choice == 1:
+                    species = "dog"
+                elif choice == 2:
+                    species = "cat"
+                elif choice == 3:
+                    species = "rabbit"
+
+                speciespets = []
+                for pet in pets:
+                    if pet.species == species:
+                        speciespets.append(pet)
+                
+                if len(speciespets) == 0:
+                    print(f"You don't have any {species} pets to play a contest with! Go breed or buy some!")
+                    continue
+                
+                count = 1
+                for pet in speciespets:
+                    print(f"{count}. {pet.view()}")
+                    count += 1
+                choice = inputchecker(count-1)
+                selectedpet = pets[choice-1]
+
+                win = selectedpet.compete(petgen(species, selectedpet.rank)) # compete function with a randomly generated competitor of the same species and rank as the selected pet
+
+                if win:
+                    user.money += 10
+
+            case 4:
+                user.shop() # shop function
 
                 
-            case 2:
-                pass
+
+
+                
                 
 # Game Loop
 
