@@ -1,6 +1,6 @@
 # Simple Pet Sim
 ***
-![Image of project running correctly](relative image in repository)
+![Image of initialization and main menu](playing.png)
 ***
 This is a simple pet simulator. You play as a person who is trying to keep their pets alive. To do so, you have to make money via competitions and train your pets! If you don't maintain enough money and food, or son't play a lot, your pets will die!
 
