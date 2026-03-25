@@ -46,10 +46,10 @@ class petly:
         self.statcheck()
     
     def view(self):
-        return f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    Health: {self.health}%\n    Hunger: {self.hunger}%\n    Thirst: {self.thirst}%"
+        return f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    Health: {round(self.health)}%\n    Hunger: {round(self.hunger)}%\n    Thirst: {round(self.thirst)}%"
     
     def detailedview(self):
-        details = f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    exp: {self.exp}\n    Health: {self.health}%\n    Hunger: {self.hunger}%\n    Thirst: {self.thirst}%\n    Happiness: {self.happiness}%\n    Athletics: {self.athletics}\n    Beauty: {self.beauty}\n"
+        details = f"{self.name}\n    {self.age} years old\n    Species: {self.species}\n    Rank: {self.rank}\n    exp: {self.exp}\n    Health: {round(self.health)}%\n    Hunger: {round(self.hunger)}%\n    Thirst: {round(self.thirst)}%\n    Happiness: {round(self.happiness)}%\n    Athletics: {self.athletics}\n    Beauty: {self.beauty}\n"
         print(details)
         for skill in self.skills.keys():
             print(f"{skill}: {self.skills[skill]}")

@@ -1,3 +1,4 @@
-name,species,age,exp,rank,happiness,hunger,thirst,health,athletics,beauty,skills,familytree
-Gummy,40,2026-03-25 05:22:48,'{}',0,0,0,0,0,0,0,0,0
-Bebe,dog,0,0,F,50,99.99915630680556,99.99915630680556,99.9983126136111,10,10,'{}','[]'
+name,species,age,exp,rank,happiness,hunger,thirst,health,athletics,beauty,skills,familytree
+Franco,0,2026-03-25 07:42:46,'{}',0,0,0,0,0,0,0,0,0
+Bebe,dog,0,10,F,50,99.99042002222224,99.99042002222224,99.98084004444443,10,10,'{}','[]'
+Nocturne,dog,0,0,F,67,63.997188533472226,61.997188533472226,60.994377066944445,12,19,'{}','[]'

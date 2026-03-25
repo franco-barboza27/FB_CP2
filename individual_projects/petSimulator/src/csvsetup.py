@@ -1,5 +1,5 @@
 import csv, pathlib, datetime
-
+import sys
 from classyclasses import *
 
 def quitting(user, pets, path):
@@ -13,6 +13,9 @@ def quitting(user, pets, path):
 
         for pet in pets:
             writer.writerow({"name": pet.name,"species": pet.species,"age": pet.age,"exp": pet.exp,"rank": pet.rank,"happiness": pet.happiness,"hunger": pet.hunger,"thirst": pet.thirst,"health": pet.health,"athletics": pet.athletics,"beauty": pet.beauty,"skills": f"'{pet.skills}'","familytree": f"'{pet.familytree}'"})
+
+    sys.exit()
+
 
 def savesgetter():
     basepath = pathlib.Path(__file__).resolve().parent
