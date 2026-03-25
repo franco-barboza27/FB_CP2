@@ -35,9 +35,10 @@ class petly:
         self.hunger += hunger
         self.thirst += thirst
         self.health += (thirst+hunger)*.5
-
+        self.happiness += (thirst+hunger)*.25
         self.health = round(self.health)
 
+        print(f"{self.name}'s health increased by {(thirst+hunger)*.5}! Happiness also increased by {(thirst+hunger)*.25}!")
         self.statcheck()
 
     def healthchange(self, change):
