@@ -9,5 +9,7 @@
         # ask which class they want to go to
             # GOTO initialize
                 # from initialize, get the students for the class they chose
-            # GOTO 
+                # GOTO gradeloop
     # if no: exit program
+
+# MAKE A FUNCTION/PART THAT CHECKS IF A FILE BEING CREATED BY THE USER IS ALREADY EXISTANT ! ! ! !
