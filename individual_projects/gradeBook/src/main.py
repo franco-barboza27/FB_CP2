@@ -1,4 +1,6 @@
 # FB Grade book
+from helpers import *
+import sys
 
 # Display Welcoming
 
@@ -13,3 +15,15 @@
     # if no: exit program
 
 # MAKE A FUNCTION/PART THAT CHECKS IF A FILE BEING CREATED BY THE USER IS ALREADY EXISTANT ! ! ! !
+
+print("Welcome to the grade book!")
+
+while True:
+    print("Would you like to begin the program? (1 for yes, 2 for no)")
+    choicevar = inputchecker(2)
+    if choicevar == 1:
+        print("Great! Which class would you like to go to?")
+        
+    else:
+        print("Okay, goodbye!")
+        sys.exit()
