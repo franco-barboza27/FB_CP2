@@ -26,7 +26,30 @@
             # if the students ID matches the ID in the class object:
                 # print the students name, grade average, letter grade, academic standing, and GPA
 
+class schoolClass:
+    def __init__(self, name):
+        self.name = name
+        self.students = []
+    
+    def addstudent(self, student):
+        self.students.append(student)
 
+class student:
+    def __init__(self, id, name, gradepercent, gradeletter, gradelevel, gradeavg, academicstanding):
+        self.id = id
+        self.name = name
+        self.gradepercent = gradepercent
+        self.gradeletter = gradeletter
+        self.gradelevel = gradelevel
+        self.gradeavg = gradeavg
+        self.academicstanding = academicstanding
+    
+    def addgrade(self, pointsgot, maxpoints):
+        currentpoints = (self.gradeavg / 100) * maxpoints
+        currentpoints += pointsgot
+        maxpoints += maxpoints
+        newgradeavg = (currentpoints / maxpoints) * 100
+        self.gradeavg = round(newgradeavg, 2)
 # class class:
     # initialize class:
         # takes in the class name = class name

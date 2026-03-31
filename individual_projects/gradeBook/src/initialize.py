@@ -6,7 +6,7 @@ from turtle import st
 
 # Initializing the class/students:
 
-def classGet(classname):
+def studentGet(classname):
     basepath = pathlib.Path(__file__).resolve().parent
     filepath = basepath.parent / 'resources' / 'classesHolder' / f'{classname}.csv' 
     with open(filepath, "r") as f:
@@ -19,13 +19,13 @@ def classGet(classname):
 
                     thisname = line[0]
                     thisid = line[1]
-                    thisgradeavg = line[2]
+                    thisgradepercent = line[2]
                     thisgradeletter = line[3]
                     thisgrade = line[4]
 
                     students[-1]["name"] = thisname
                     students[-1]["id"] = thisid
-                    students[-1]["gradeavg"] = thisgradeavg
+                    students[-1]["gradepercent"] = thisgradepercent
                     students[-1]["gradeletter"] = thisgradeletter
                     students[-1]["gradelevel"] = thisgrade
 
@@ -137,3 +137,29 @@ def gradeavgGET(students):
         # write the header of the CSV
         # for every student in the class object:
             # write the students data to the CSV in the correct format
+
+def saveStudents(students, classname):
+    basepath = pathlib.Path(__file__).resolve().parent
+    filepath = basepath.parent / 'resources' / 'classesHolder' / f'{classname}.csv' 
+    with open(filepath, "w", newline='') as f:
+        writer = csv.writer(f, fieldnames = ["id", "name", "gradepercent", "gradeletter", "gradelevel"], delimiter=",")
+        heading = ["id", "name", "gradepercent", "gradeletter", "gradelevel"]
+        writer.writeheader()
+        # writer.writerow(file, )
+        
+# IF THIS DOESN'T WORK, TRY DICTWRITER AS IT IS USED IN THE WORDCOUNTER PROJECT
+        for student in students:
+            writer.writerow([student.id, student.name, student.gradepercent, student.gradeletter, student.gradelevel])
+
+    gradeavgSAVE(students)
+
+def gradeavgSAVE(students):
+
+    basepath = pathlib.Path(__file__).resolve().parent
+    filepath = basepath.parent / 'resources' / 'students.csv'
+    with open(filepath, "w", newline='') as f:
+        writer = csv.writer(f)
+        heading = ["id", "gradeavg", "academicstanding"]
+        writer.writeheader()
+        for student in students:
+            writer.writerow([student.id, student.gradeavg, student.academicstanding])
