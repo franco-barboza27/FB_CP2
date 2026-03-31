@@ -1,5 +1,5 @@
-ID, GPA, academic standing
-0100, 0.0, N/A
-1032, 3.5, Good Standing
-1258, 3.0, Honors Roll
-1992, 1.8, Needs Improvement
+ID, gradeavg, academic standing
+0100, 0, N/A
+1032, 86.8, Good Standing
+1258, 97.6, Honors Roll
+1992, 63.7, Needs Improvement
