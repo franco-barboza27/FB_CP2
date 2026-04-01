@@ -124,6 +124,7 @@ class student:
         print(f"    Grade Percentage: {self.gradepercent}")
         print(f"    Grade Level: {self.gradelevel}")
 
+
 # class class:
     # initialize class:
         # takes in the class name = class name
