@@ -1,8 +1,6 @@
 # STUDENTS SHOULD BE STORED IN *CODE* AS {id1:{name:name, grade%avg:num, gradeletter:letter, Grade:num}, id2:...}
     # where id is a unique number (which will be ensured when creating a student, and so will that they exist in the students CSV)
-import math
 import csv, pathlib
-from turtle import st
 
 # Initializing the class/students:
 
@@ -63,8 +61,8 @@ def gradeavgCALC(students):
                 for line in reader:
                     if line:
                         try:
-                            if student.ids == line[0]:
-                                grades.append(float(line[2]))
+                            if student.id == line[0]:
+                                grades.append(float(line[1]))
                         except:
                             print("Error occurred while processing line. ~68 in code")
                             continue
@@ -72,6 +70,8 @@ def gradeavgCALC(students):
         if grades:
             gradeavg = sum(grades) / len(grades)
             student.gradeavg = round(gradeavg, 2)
+        else:
+            gradeavg = 0
 
         if gradeavg >= 90:
             student.academicstanding = "Honor Roll"
@@ -139,6 +139,7 @@ def gradeavgGET(students):
             # write the students data to the CSV in the correct format
 
 def saveStudents(students, classname):
+    gradeavgCALC(students)
     basepath = pathlib.Path(__file__).resolve().parent
     filepath = basepath.parent / 'resources' / 'classesHolder' / f'{classname}.csv' 
     with open(filepath, "w", newline='') as f:

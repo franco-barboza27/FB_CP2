@@ -1,3 +1,5 @@
+import random
+
 # student:
     # initialize student:
         # takes in the students name, ID, current grade in class, grade letter, and grade level(freshman, sophomore, etc.)
@@ -32,7 +34,63 @@ class schoolClass:
         self.students = []
     
     def addstudent(self, student):
-        self.students.append(student)
+        ids = []
+        try:
+            student.id =int(student.id)
+        except:
+            if student.id == "N/A":
+                pass
+            else:
+                print("Invalid student ID. Please provide a student with a valid ID.")
+                return True
+
+        if student.id.isnumeric():
+            if student.id not in ids:
+                self.students.append(student)
+                return False
+        else:
+            for stude in self.students:
+                ids.append(stude.id)
+
+            while True:
+                student.id = random.randint(0, 2000)
+                if student.id not in ids:
+                    break
+                else:
+                    continue
+            self.students.append(student)
+            return True
+
+    def viewallstudents(self):
+        for stude in self.students:
+            stude.viewSummaryRecord()
+
+    def classSummary(self):
+        highestgrade = 0
+        lowestgrade = 100
+        totalgrades = 0
+        count = 0
+
+        for stude in self.students:
+            count += 1
+            totalgrades += stude.gradepercent
+            if stude.gradepercent > highestgrade:
+                highestgrade = stude.gradepercent
+            if stude.gradepercent < lowestgrade:
+                lowestgrade = stude.gradepercent
+
+        if count > 0:
+            averagegrade = totalgrades / count
+        else:
+            averagegrade = 0
+
+        print(f"Class Name: {self.name}")
+        print(f"Highest Grade: {highestgrade}")
+        print(f"Lowest Grade: {lowestgrade}")
+        print(f"Total Students: {count}")
+        print(f"Average Grade: {averagegrade}")
+
+# 1. Add student, 2. Add grade, 3. View student record, 4. View all students, 5. Class summary
 
 class student:
     def __init__(self, id, name, gradepercent, gradeletter, gradelevel, gradeavg, academicstanding):
@@ -50,6 +108,22 @@ class student:
         maxpoints += maxpoints
         newgradeavg = (currentpoints / maxpoints) * 100
         self.gradeavg = round(newgradeavg, 2)
+    
+    def viewDeetRecord(self):
+        print(f"Student ID: {self.id}")
+        print(f"    Student Name: {self.name}")
+        print(f"    Grade Percentage: {self.gradepercent}")
+        print(f"    Grade Letter: {self.gradeletter}")
+        print(f"    Grade Level: {self.gradelevel}")
+        print(f"    Grade Average: {self.gradeavg}")
+        print(f"    Academic Standing: {self.academicstanding}")
+    
+    def viewSummaryRecord(self):
+        print(f"Student ID: {self.id}")
+        print(f"    Student Name: {self.name}")
+        print(f"    Grade Percentage: {self.gradepercent}")
+        print(f"    Grade Level: {self.gradelevel}")
+
 # class class:
     # initialize class:
         # takes in the class name = class name

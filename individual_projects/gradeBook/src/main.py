@@ -2,6 +2,7 @@
 from helpers import *
 import sys
 import initialize
+import gradeloop
 # Display Welcoming
 
 # Ask if they would like to begin the program
@@ -29,7 +30,7 @@ def main():
             classchoice = inputchecker(5)
             match classchoice:
                 case 1:
-                    classchoice = "americanhistory"
+                    classchoice = "amCiv"
                 case 2:
                     classchoice = "english"
                 case 3:
@@ -37,9 +38,11 @@ def main():
                 case 4:
                     classchoice = "chemistry"
                 case 5:
-                    classchoice = "computerscience"
+                    classchoice = "CompSci2"
 
             students = initialize.studentGet(classchoice)
+            gradeloop.gradebookstartup(students, classchoice)
+            
         else:
             print("Okay, goodbye!")
             sys.exit()
