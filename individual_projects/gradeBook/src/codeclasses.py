@@ -36,7 +36,8 @@ class schoolClass:
     def addstudent(self, student):
         ids = []
         try:
-            student.id =int(student.id)
+            studeupd = int(student.id)
+            student.id = studeupd
         except:
             if student.id == "N/A":
                 pass
@@ -44,22 +45,23 @@ class schoolClass:
                 print("Invalid student ID. Please provide a student with a valid ID.")
                 return True
 
-        if student.id.isnumeric():
-            if student.id not in ids:
-                self.students.append(student)
-                return False
+
+        if student.id not in ids and student.id != "N/A":
+            self.students.append(student)
+            return False
         else:
             for stude in self.students:
                 ids.append(stude.id)
 
             while True:
-                student.id = random.randint(0, 2000)
+                student.id = str(random.randint(0, 2000))
                 if student.id not in ids:
+                    print(f"This student's ID is {student.id}")
                     break
                 else:
                     continue
             self.students.append(student)
-            return True
+            return False
 
     def viewallstudents(self):
         for stude in self.students:
@@ -94,20 +96,28 @@ class schoolClass:
 
 class student:
     def __init__(self, id, name, gradepercent, gradeletter, gradelevel, gradeavg, academicstanding):
-        self.id = id
         self.name = name
-        self.gradepercent = gradepercent
         self.gradeletter = gradeletter
         self.gradelevel = gradelevel
-        self.gradeavg = gradeavg
         self.academicstanding = academicstanding
+        self.id = id
+
+        try:
+            self.gradeavg = int(gradeavg)
+        except:
+            self.gradeavg = 0
+        
+        try:
+            self.gradepercent = int(gradepercent)
+        except:
+            self.gradepercent = 0
     
-    def addgrade(self, pointsgot, maxpoints):
-        currentpoints = (self.gradeavg / 100) * maxpoints
+    def addgrade(self, pointsgot, totalpoints, maxpoints):
+        currentpoints = self.gradepercent/100 * maxpoints
         currentpoints += pointsgot
-        maxpoints += maxpoints
+        maxpoints += totalpoints
         newgradeavg = (currentpoints / maxpoints) * 100
-        self.gradeavg = round(newgradeavg, 2)
+        self.gradepercent = round(newgradeavg, 2)
     
     def viewDeetRecord(self):
         print(f"Student ID: {self.id}")

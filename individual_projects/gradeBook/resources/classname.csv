@@ -1,2 +1,5 @@
 id, name, gradepercent, grade letter, grade
 1234, Ari Jane, 70, C, 11
+
+id, gradeavg, academicstanding
+1234, 70, Satisfactory

@@ -15,8 +15,8 @@ def studentGet(classname):
                 try:
                     students.append({})
 
-                    thisname = line[0]
-                    thisid = line[1]
+                    thisname = line[1]
+                    thisid = line[0]
                     thisgradepercent = line[2]
                     thisgradeletter = line[3]
                     thisgrade = line[4]
@@ -24,8 +24,8 @@ def studentGet(classname):
                     students[-1]["name"] = thisname
                     students[-1]["id"] = thisid
                     students[-1]["gradepercent"] = thisgradepercent
-                    students[-1]["gradeletter"] = thisgradeletter
-                    students[-1]["gradelevel"] = thisgrade
+                    students[-1]["grade letter"] = thisgradeletter
+                    students[-1]["grade"] = thisgrade
 
                 except:
                     print("There aren't any students in this class yet :(")
@@ -120,8 +120,11 @@ def gradeavgGET(students):
                         if student["id"] == line[0]:
                             student["gradeavg"] = round(float(line[1]), 2)
                             student["academicstanding"] = line[2]
+                        else:
+                            student["gradeavg"] = 0
+                            student["academicstanding"] = "N/A"
                     except:
-                        print(f"Error occurred while processing line. ~122 in code")
+                        print(f"Loading")
                         continue
     
     return students
@@ -143,14 +146,16 @@ def saveStudents(students, classname):
     basepath = pathlib.Path(__file__).resolve().parent
     filepath = basepath.parent / 'resources' / 'classesHolder' / f'{classname}.csv' 
     with open(filepath, "w", newline='') as f:
-        writer = csv.writer(f, fieldnames = ["id", "name", "gradepercent", "gradeletter", "gradelevel"], delimiter=",")
-        heading = ["id", "name", "gradepercent", "gradeletter", "gradelevel"]
+        writer = csv.DictWriter(f, fieldnames = ["id", "name", "gradepercent", "grade letter", "grade"], delimiter=",")
+        heading = ["id", "name", "gradepercent", "grade letter", "grade"]
         writer.writeheader()
+
         # writer.writerow(file, )
-        
-# IF THIS DOESN'T WORK, TRY DICTWRITER AS IT IS USED IN THE WORDCOUNTER PROJECT
+
+        # IF THIS DOESN'T WORK, TRY DICTWRITER AS IT IS USED IN THE WORDCOUNTER PROJECT
         for student in students:
-            writer.writerow([student.id, student.name, student.gradepercent, student.gradeletter, student.gradelevel])
+            studedict = {"id": student.id, "name": student.name, "gradepercent": student.gradepercent, "grade letter": student.gradeletter, "grade": student.gradelevel}
+            writer.writerow(studedict)
 
     gradeavgSAVE(students)
 
@@ -159,8 +164,9 @@ def gradeavgSAVE(students):
     basepath = pathlib.Path(__file__).resolve().parent
     filepath = basepath.parent / 'resources' / 'students.csv'
     with open(filepath, "w", newline='') as f:
-        writer = csv.writer(f)
+        writer = csv.DictWriter(f, fieldnames=["id", "gradeavg", "academicstanding"])
         heading = ["id", "gradeavg", "academicstanding"]
         writer.writeheader()
         for student in students:
-            writer.writerow([student.id, student.gradeavg, student.academicstanding])
+            studedict = {"id": student.id, "gradeavg": student.gradeavg, "academicstanding": student.academicstanding}
+            writer.writerow(studedict)

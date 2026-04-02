@@ -12,3 +12,15 @@ def inputchecker(rangeofchoices):
                     continue
             
     return choicevar
+
+def integercheck():
+    while True:
+        num = input("Please enter a number value:")
+        try:
+                nnum = int(num)
+                num = nnum
+                break
+        except ValueError:
+            continue
+    
+    return num 
